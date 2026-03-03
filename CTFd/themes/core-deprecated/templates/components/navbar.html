@@ -1,21 +1,16 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top pixel-navbar">
     <div class="container">
         <a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand">
             {% if Configs.ctf_logo %}
-                <img class="img-responsive ctf_logo"
-                     src="{{ url_for('views.files', path=Configs.ctf_logo) }}"
-                     height="30"
-                     alt="{{ Configs.ctf_name }}">
+                <img class="img-responsive ctf_logo" src="{{ url_for('views.files', path=Configs.ctf_logo) }}" height="30" alt="{{ Configs.ctf_name }}">
             {% else %}
-                {{ Configs.ctf_name }}
+                <span class="brand-text">{{ Configs.ctf_name }}</span>
             {% endif %}
         </a>
-
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#base-navbars"
                 aria-controls="base-navbars" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="base-navbars">
             <ul class="navbar-nav mr-auto">
                 {% for page in Plugins.user_menu_pages %}
@@ -29,9 +24,9 @@
                         <a class="nav-link" href="{{ url_for('users.listing') }}">Users</a>
                     </li>
                     {% if Configs.user_mode == 'teams' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('teams.listing') }}">Teams</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('teams.listing') }}">Teams</a>
+                    </li>
                     {% endif %}
                 {% endif %}
 
@@ -46,62 +41,56 @@
                 </li>
             </ul>
 
-            <hr class="d-sm-flex d-md-flex d-lg-none">
+            <hr class="d-sm-flex d-md-flex d-lg-none navbar-divider">
 
-            <ul class="navbar-nav ml-md-auto d-block d-sm-flex d-md-flex">
+            <ul class="navbar-nav ml-md-auto">
                 {% if authed() %}
                     {% if is_admin() %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin.view') }}">
-                                <i class="fas fa-wrench pr-1"></i>Admin
+                            <a class="nav-link" href="{{ url_for('admin.view') }}" data-toggle="tooltip" title="Admin">
+                                <span class="d-md-none d-lg-inline ml-1">Admin</span>
                             </a>
                         </li>
                     {% endif %}
-
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('views.notifications') }}">
-                            <i class="fas fa-bell pr-1"></i>
+                        <a class="nav-link" href="{{ url_for('views.notifications') }}" data-toggle="tooltip" title="Notifications">
                             <span class="badge badge-pill badge-danger badge-notification"></span>
-                            Notifications
+                            <span class="d-md-none d-lg-inline ml-1">Notifications</span>
                         </a>
                     </li>
-
                     {% if Configs.user_mode == "teams" %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('teams.private') }}">
-                                <i class="fas fa-users pr-1"></i>Team
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('teams.private') }}" data-toggle="tooltip" title="Team">
+                            <span class="d-md-none d-lg-inline ml-1">Team</span>
+                        </a>
+                    </li>
                     {% endif %}
-
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.private') }}">
-                            <i class="fas fa-user-circle pr-1"></i>Profile
+                        <a class="nav-link" href="{{ url_for('users.private') }}" data-toggle="tooltip" title="Profile">
+                            <span class="d-md-none d-lg-inline ml-1">Profile</span>
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('views.settings') }}">
-                            <i class="fas fa-cogs pr-1"></i>Settings
+                        <a class="nav-link" href="{{ url_for('views.settings') }}" data-toggle="tooltip" title="Settings">
+                            <span class="d-md-none d-lg-inline ml-1">Settings</span>
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('auth.logout') }}">
-                            <i class="fas fa-sign-out-alt pr-1"></i>Logout
+                        <a class="nav-link nav-link-logout" href="{{ url_for('auth.logout') }}">
+                            <span class="d-md-none d-lg-inline ml-1">Logout</span>
                         </a>
                     </li>
                 {% else %}
                     {% if registration_visible() %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.register') }}">
-                                <i class="fas fa-user-plus pr-1"></i>Register
+                            <a class="nav-link nav-link-register" href="{{ url_for('auth.register') }}">
+                                Register
                             </a>
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('auth.login') }}">
-                            <i class="fas fa-sign-in-alt pr-1"></i>Login
+                        <a class="nav-link nav-link-login" href="{{ url_for('auth.login') }}">
+                            Login
                         </a>
                     </li>
                 {% endif %}
@@ -111,69 +100,371 @@
 </nav>
 
 <style>
-/* Compact Glass Navbar */
-.navbar {
-	background: linear-gradient(
-		180deg,
-		rgba(10, 10, 10, 0.95) 0%,
-		rgba(10, 10, 10, 0.75) 60%,
-		rgba(10, 10, 10, 0) 100%
-	) !important;
-	backdrop-filter: blur(6px);
-	border: none !important;
-	box-shadow: none !important;
-	padding: 0.5rem 0 1rem 0 !important;
-	min-height: 64px;
+/* PIXEL PIONEERS PROFESSIONAL NAVBAR */
+.pixel-navbar {
+    background: rgba(10, 10, 20, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid #00d9ff;
+    box-shadow: 0 2px 20px rgba(0, 217, 255, 0.3);
+    padding: 0.4rem 0;
+    position: relative;
+    overflow: hidden;
 }
 
-.navbar .container {
-	position: relative;
-	z-index: 10;
+/* Network canvas background */
+.network-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.4;
 }
 
-.navbar-brand {
-	color: #f5f5f5 !important;
-	font-weight: 700;
-	font-size: 1.25rem;
+/* Circuit pattern overlay */
+.pixel-navbar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(90deg, rgba(0, 217, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(rgba(0, 217, 255, 0.02) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: 1;
 }
 
-.navbar-nav {
-	margin-top: 0.25rem;
+/* Fade navbar on scroll */
+.pixel-navbar {
+    transition: opacity 0.3s ease, background 0.3s ease;
 }
 
-.navbar-nav .nav-link {
-	color: #e0e0e0 !important;
-	font-size: 0.95rem;
-	font-weight: 500;
-	padding: 0.35rem 0.9rem;
+.pixel-navbar.fade-out {
+    opacity: 0;
+    pointer-events: none;
 }
 
-.navbar-nav .nav-link:hover {
-	color: #ffffff !important;
+.pixel-navbar.scrolled {
+    background: rgba(5, 5, 8, 0.98) !important;
+    box-shadow: 0 4px 25px rgba(0, 217, 255, 0.4);
 }
 
-.navbar-nav .nav-link i {
-	font-size: 1rem;
+.brand-text {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #00d9ff;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
 }
 
-.navbar-toggler {
-	border: none;
-	padding: 0.4rem;
+.ctf_logo {
+    filter: drop-shadow(0 0 10px rgba(0, 217, 255, 0.6));
+}
+
+.pixel-navbar .navbar-toggler {
+    border: 1px solid #00d9ff;
+    border-radius: 0;
+    padding: 0.4rem 0.6rem;
+}
+
+.pixel-navbar .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2300d9ff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.pixel-navbar .nav-item {
+    margin: 0 0.1rem;
+    position: relative;
+}
+
+.pixel-navbar .nav-link {
+    color: #e0f4ff !important;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.5rem 0.8rem;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+/* Hexagonal hover indicator */
+.pixel-navbar .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #00d9ff, #ff00ff);
+    transition: width 0.2s ease;
+}
+
+.pixel-navbar .nav-link:hover::after {
+    width: 80%;
+}
+
+.pixel-navbar .nav-link:hover {
+    color: #00d9ff !important;
+}
+
+.pixel-navbar .nav-item.active .nav-link,
+.pixel-navbar .nav-link.active {
+    color: #00d9ff !important;
+}
+
+.pixel-navbar .nav-item.active .nav-link::after {
+    width: 80%;
+}
+
+.nav-link-login,
+.nav-link-register {
+    background: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%) !important;
+    color: #000 !important;
+    border-radius: 0;
+    padding: 0.4rem 1rem !important;
+    margin-left: 0.3rem;
+    font-weight: 700 !important;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link-login::before,
+.nav-link-register::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.3s ease;
+}
+
+.nav-link-login:hover::before,
+.nav-link-register:hover::before {
+    left: 100%;
+}
+
+.nav-link-login:hover,
+.nav-link-register:hover {
+    background: linear-gradient(135deg, #0066ff 0%, #00d9ff 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 0 25px rgba(0, 217, 255, 0.6);
+}
+
+.nav-link-login::after,
+.nav-link-register::after {
+    display: none;
+}
+
+.nav-link-logout {
+    border: 1px solid #ff006e !important;
+    border-radius: 0;
+    padding: 0.4rem 1rem !important;
+    margin-left: 0.3rem;
+    transition: all 0.2s ease;
+    color: #ff006e !important;
+}
+
+.nav-link-logout:hover {
+    background: #ff006e !important;
+    color: #fff !important;
+    box-shadow: 0 0 20px rgba(255, 0, 110, 0.6);
+}
+
+.nav-link-logout::after {
+    display: none;
 }
 
 .badge-notification {
-	background: #dc3545;
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.65rem;
+    background: #ff006e;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 0, 110, 0.8);
 }
 
-hr {
-	border-top: 1px solid rgba(255, 255, 255, 0.08);
-	margin: 0.8rem 0;
+.navbar-divider {
+    border-top: 1px solid rgba(0, 217, 255, 0.3);
+    margin: 0.5rem 0;
+}
+
+.tooltip-inner {
+    background: linear-gradient(135deg, #00d9ff, #0066ff);
+    color: #000;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 600;
+    border-radius: 0;
+}
+
+.tooltip.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: #00d9ff;
 }
 
 @media (max-width: 768px) {
-	.navbar {
-		padding: 0.45rem 0 0.8rem 0 !important;
-		min-height: auto;
-	}
+    .pixel-navbar {
+        padding: 0.3rem 0;
+    }
+    
+    .brand-text {
+        font-size: 1.2rem;
+    }
+    
+    .pixel-navbar .nav-link {
+        padding: 0.6rem 0.8rem;
+        margin: 0.15rem 0;
+    }
+    
+    .nav-link-login,
+    .nav-link-register,
+    .nav-link-logout {
+        margin: 0.3rem 0 0 0 !important;
+        width: 100%;
+        text-align: center;
+    }
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.pixel-navbar');
+    
+    // Network Animation Canvas
+    const canvas = document.createElement('canvas');
+    canvas.className = 'network-canvas';
+    navbar.insertBefore(canvas, navbar.firstChild);
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = navbar.offsetWidth;
+    canvas.height = navbar.offsetHeight;
+    
+    // Network nodes
+    const nodes = [];
+    const nodeCount = 15;
+    const connectionDistance = 150;
+    
+    class Node {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 2 + 1;
+        }
+        
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+        
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#00d9ff';
+            ctx.fill();
+            
+            // Node glow
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#00d9ff';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+    }
+    
+    // Initialize nodes
+    for (let i = 0; i < nodeCount; i++) {
+        nodes.push(new Node());
+    }
+    
+    // Animation loop
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Update and draw nodes
+        nodes.forEach(node => {
+            node.update();
+            node.draw();
+        });
+        
+        // Draw connections
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const dx = nodes[i].x - nodes[j].x;
+                const dy = nodes[i].y - nodes[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < connectionDistance) {
+                    const opacity = (1 - distance / connectionDistance) * 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[j].x, nodes[j].y);
+                    ctx.strokeStyle = `rgba(0, 217, 255, ${opacity})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        requestAnimationFrame(animate);
+    }
+    
+    animate();
+    
+    // Resize handler
+    window.addEventListener('resize', function() {
+        canvas.width = navbar.offsetWidth;
+        canvas.height = navbar.offsetHeight;
+    });
+    
+    // Scroll effect with fade
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+        
+        // Fade out when scrolling down fast
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+            navbar.classList.add('fade-out');
+        } else {
+            navbar.classList.remove('fade-out');
+        }
+        
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+    
+    // Active page highlighting
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.pixel-navbar .nav-link').forEach(function(link) {
+        if (link.getAttribute('href') === currentPath) {
+            link.closest('.nav-item').classList.add('active');
+        }
+    });
+    
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

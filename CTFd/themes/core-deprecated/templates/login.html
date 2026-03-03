@@ -1,589 +1,449 @@
 {% extends "base.html" %}
 
-{% block stylesheets %}
-	<!-- Manga Login Page Styles -->
-	<style>
-		/* Manga Panel - Login Page */
-		
-		/* Hero Jumbotron */
-		.jumbotron {
-			background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-			border-bottom: 4px solid #f5f5f5;
-			border-top: 4px solid #f5f5f5;
-			border-radius: 0;
-			padding: 3rem 1rem;
-			margin-bottom: 3rem;
-			box-shadow: 
-				0 6px 0 rgba(0,0,0,0.8),
-				inset 0 0 0 1px rgba(255,255,255,0.1);
-			position: relative;
-		}
-		
-		.jumbotron::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background: repeating-linear-gradient(
-				-45deg,
-				transparent,
-				transparent 20px,
-				rgba(255,255,255,0.01) 20px,
-				rgba(255,255,255,0.01) 40px
-			);
-			pointer-events: none;
-		}
-		
-		.jumbotron .container {
-			position: relative;
-			z-index: 1;
-		}
-		
-		.jumbotron h1 {
-			color: #f5f5f5;
-			font-family: "Rajdhani", sans-serif;
-			font-weight: 900;
-			font-size: 3.5rem;
-			text-transform: uppercase;
-			letter-spacing: 8px;
-			margin: 0;
-			text-shadow: 
-				3px 3px 0 #000,
-				-1px -1px 0 #000,
-				1px -1px 0 #000,
-				-1px 1px 0 #000,
-				6px 6px 0 rgba(0,0,0,0.3);
-		}
-		
-		/* Login Container */
-		.login-container {
-			animation: fadeInUp 0.8s ease;
-		}
-		
-		@keyframes fadeInUp {
-			from {
-				opacity: 0;
-				transform: translateY(30px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-		
-		/* Login Card - Manga Panel */
-		.login-card {
-			background: #1a1a1a;
-			border: 4px solid #2a2a2a;
-			border-radius: 0;
-			padding: 3rem 2.5rem;
-			box-shadow: 
-				8px 8px 0 rgba(0,0,0,0.5),
-				inset 0 0 0 1px rgba(255,255,255,0.05);
-			transition: all 0.3s ease;
-			position: relative;
-		}
-		
-		.login-card::before {
-			content: "";
-			position: absolute;
-			top: -6px;
-			left: -6px;
-			right: -6px;
-			bottom: -6px;
-			border: 1px solid rgba(255,255,255,0.1);
-			pointer-events: none;
-		}
-		
-		.login-card:hover {
-			border-color: #3a3a3a;
-			box-shadow: 
-				10px 10px 0 rgba(0,0,0,0.5),
-				inset 0 0 0 1px rgba(255,255,255,0.1);
-		}
-		
-		/* Login Icon */
-		.login-icon {
-			text-align: center;
-			margin-bottom: 2rem;
-			position: relative;
-		}
-		
-		.login-icon::before {
-			content: "";
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			width: 120px;
-			height: 120px;
-			border: 3px solid rgba(255,255,255,0.1);
-			border-radius: 50%;
-		}
-		
-		.login-icon::after {
-			content: "";
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			width: 140px;
-			height: 140px;
-			border: 2px solid rgba(255,255,255,0.05);
-			border-radius: 50%;
-		}
-		
-		/* Welcome Text */
-		.login-welcome {
-			text-align: center;
-			margin-bottom: 2.5rem;
-			position: relative;
-			padding: 1.5rem;
-			background: repeating-linear-gradient(
-				0deg,
-				transparent,
-				transparent 4px,
-				rgba(255,255,255,0.02) 4px,
-				rgba(255,255,255,0.02) 8px
-			);
-		}
-		
-		.login-welcome h2 {
-			color: #f5f5f5;
-			font-family: "Rajdhani", sans-serif;
-			font-weight: 900;
-			font-size: 2rem;
-			margin-bottom: 0.5rem;
-			letter-spacing: 3px;
-			text-transform: uppercase;
-			text-shadow: 2px 2px 0 #000;
-		}
-		
-		.login-welcome p {
-			color: #b0b0b0;
-			font-size: 1rem;
-			font-weight: 600;
-			letter-spacing: 1px;
-		}
-		
-		/* Form Labels */
-		.login-card .form-group label,
-		.login-card .form-group b {
-			color: #f5f5f5;
-			font-weight: 900;
-			font-size: 0.9rem;
-			text-transform: uppercase;
-			letter-spacing: 2px;
-			margin-bottom: 0.5rem;
-			display: block;
-			font-family: "Rajdhani", sans-serif;
-		}
-		
-		/* Form Inputs */
-		.login-card .form-control {
-			background: #0a0a0a;
-			border: 3px solid #2a2a2a;
-			color: #e0e0e0;
-			padding: 1rem;
-			font-size: 1rem;
-			border-radius: 0;
-			transition: all 0.3s ease;
-			height: auto;
-			font-weight: 600;
-		}
-		
-		.login-card .form-control:focus {
-			background: #0a0a0a;
-			border-color: #f5f5f5;
-			box-shadow: 
-				0 0 0 3px rgba(255,255,255,0.1),
-				inset 0 0 10px rgba(255,255,255,0.05);
-			color: #e0e0e0;
-			outline: none;
-		}
-		
-		.login-card .form-control:hover {
-			border-color: #3a3a3a;
-		}
-		
-		.login-card .form-control::placeholder {
-			color: #4a4a4a;
-			font-weight: 500;
-		}
-		
-		/* Form Group Spacing */
-		.login-card .form-group {
-			margin-bottom: 2rem;
-		}
-		
-		/* OAuth Login Button */
-		.btn-secondary.btn-lg {
-			background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-			border: 3px solid #2a2a2a;
-			color: #e0e0e0;
-			padding: 1rem 2rem;
-			font-size: 1.1rem;
-			font-weight: 900;
-			text-transform: uppercase;
-			letter-spacing: 2px;
-			border-radius: 0;
-			transition: all 0.2s ease;
-			box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
-		}
-		
-		.btn-secondary.btn-lg:hover {
-			background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
-			border-color: #f5f5f5;
-			color: #f5f5f5;
-			transform: translate(-2px, -2px);
-			box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
-		}
-		
-		/* Divider */
-		.login-card hr {
-			border-top: 3px solid #2a2a2a;
-			margin: 2.5rem 0;
-			position: relative;
-		}
-		
-		.login-card hr::after {
-			content: "OR";
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			background: #1a1a1a;
-			padding: 0 1rem;
-			color: #7f8c8d;
-			font-weight: 900;
-			letter-spacing: 2px;
-		}
-		
-		/* Submit Button */
-		.login-card .btn-primary {
-			background: #f5f5f5;
-			border: 3px solid #0a0a0a;
-			color: #0a0a0a;
-			padding: 0.875rem 2rem;
-			font-size: 1rem;
-			font-weight: 900;
-			text-transform: uppercase;
-			letter-spacing: 2px;
-			border-radius: 0;
-			transition: all 0.2s ease;
-			box-shadow: 4px 4px 0 rgba(0,0,0,0.8);
-		}
-		
-		.login-card .btn-primary:hover {
-			background: #fff;
-			border-color: #0a0a0a;
-			color: #0a0a0a;
-			transform: translate(-2px, -2px);
-			box-shadow: 6px 6px 0 rgba(0,0,0,0.8);
-		}
-		
-		.login-card .btn-primary:active {
-			transform: translate(1px, 1px);
-			box-shadow: 3px 3px 0 rgba(0,0,0,0.8);
-		}
-		
-		/* Forgot Password Link */
-		.align-text-to-button {
-			color: #b0b0b0;
-			text-decoration: none;
-			font-weight: 700;
-			transition: all 0.3s ease;
-			display: inline-flex;
-			align-items: center;
-			line-height: 1.5;
-			letter-spacing: 1px;
-			border-bottom: 2px solid transparent;
-		}
-		
-		.align-text-to-button:hover {
-			color: #f5f5f5;
-			text-decoration: none;
-			border-bottom-color: #f5f5f5;
-		}
-		
-		/* Loading State */
-		.btn-primary.loading {
-			opacity: 0.6;
-			cursor: not-allowed;
-			pointer-events: none;
-		}
-		
-		.btn-primary.loading::after {
-			content: "";
-			display: inline-block;
-			width: 14px;
-			height: 14px;
-			margin-left: 10px;
-			border: 3px solid #0a0a0a;
-			border-top-color: transparent;
-			border-radius: 50%;
-			animation: btnSpin 0.8s linear infinite;
-		}
-		
-		@keyframes btnSpin {
-			to { transform: rotate(360deg); }
-		}
-		
-		/* Input Validation States */
-		.form-control.is-valid {
-			border-color: #b0b0b0;
-		}
-		
-		.form-control.is-invalid {
-			border-color: #7f8c8d;
-			background: repeating-linear-gradient(
-				45deg,
-				#0a0a0a,
-				#0a0a0a 10px,
-				rgba(127,140,141,0.1) 10px,
-				rgba(127,140,141,0.1) 20px
-			);
-		}
-		
-		/* Error Messages */
-		.alert {
-			border-radius: 0;
-			border: 3px solid;
-			font-weight: 700;
-			animation: slideIn 0.3s ease;
-			letter-spacing: 1px;
-		}
-		
-		@keyframes slideIn {
-			from {
-				opacity: 0;
-				transform: translateY(-10px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-		
-		.alert-danger {
-			background: rgba(127,140,141,0.2);
-			border-color: #7f8c8d;
-			color: #e0e0e0;
-		}
-		
-		.alert-success {
-			background: rgba(176,176,176,0.2);
-			border-color: #b0b0b0;
-			color: #e0e0e0;
-		}
-		
-		/* Security Badge */
-		.security-badge {
-			text-align: center;
-			margin-top: 2rem;
-			padding-top: 1.5rem;
-			border-top: 2px solid #2a2a2a;
-		}
-		
-		.security-badge small {
-			color: #7f8c8d;
-			font-size: 0.8rem;
-			font-weight: 600;
-			letter-spacing: 1px;
-		}
-		
-		/* Responsive Design */
-		@media (max-width: 768px) {
-			.jumbotron h1 {
-				font-size: 2.5rem;
-				letter-spacing: 4px;
-			}
-			
-			.login-card {
-				padding: 2rem 1.5rem;
-			}
-			
-			.login-card .btn-primary,
-			.btn-secondary.btn-lg {
-				width: 100%;
-				margin-top: 0.5rem;
-			}
-			
-			.align-text-to-button {
-				display: block;
-				text-align: center;
-				margin-bottom: 1rem;
-			}
-		}
-		
-		/* Password Toggle Button */
-		.password-toggle {
-			position: absolute;
-			right: 15px;
-			top: 50%;
-			transform: translateY(-50%);
-			background: none;
-			border: none;
-			color: #7f8c8d;
-			cursor: pointer;
-			transition: color 0.3s ease;
-			font-size: 1.2rem;
-			z-index: 10;
-		}
-		
-		.password-toggle:hover {
-			color: #f5f5f5;
-		}
-	</style>
-{% endblock %}
-
 {% block content %}
-<!-- Hero Jumbotron -->
 <div class="jumbotron">
 	<div class="container">
 		<h1>LOGIN</h1>
 	</div>
 </div>
 
-<!-- Login Container -->
-<div class="container login-container">
+<div class="container">
 	<div class="row">
-		<div class="col-md-6 offset-md-3">
+		<div class="col-md-12">
 			<div class="login-card">
-				<!-- Login Icon -->
-				<div class="login-icon">
-					<svg width="80" height="80" viewBox="0 0 80 80" style="filter: drop-shadow(2px 2px 0 #000);">
-						<circle cx="40" cy="40" r="38" fill="none" stroke="#f5f5f5" stroke-width="3"/>
-						<circle cx="40" cy="30" r="12" fill="#f5f5f5"/>
-						<path d="M 20 60 Q 20 45 40 45 T 60 60" fill="#f5f5f5"/>
-					</svg>
-				</div>
+				<!-- Network Animation Canvas -->
+				<canvas class="network-canvas"></canvas>
 				
-				<!-- Welcome Text -->
-				<div class="login-welcome">
-					<h2>Welcome Back</h2>
-					<p>Enter your credentials to continue</p>
-				</div>
-				
-				<!-- Error Messages -->
-				{% include "components/errors.html" %}
-
-				<!-- OAuth Login (if enabled) -->
-				{% if integrations.mlc() %}
-				<a class="btn btn-secondary btn-lg btn-block" href="{{ url_for('auth.oauth_login') }}">
-					Login with Major League Cyber
-				</a>
-
-				<hr>
-				{% endif %}
-
-				<!-- Login Form -->
-				{% with form = Forms.auth.LoginForm() %}
-				<form method="post" accept-charset="utf-8" autocomplete="off" id="login-form">
-					<div class="form-group">
-						<b>{{ form.name.label }}</b>
-						{{ form.name(class="form-control", value=name, placeholder="Username or Email") }}
+				<div class="card-content">
+					<div class="login-icon">
+						<svg viewBox="0 0 100 100" width="80" height="80">
+							<defs>
+								<linearGradient id="hexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+									<stop offset="0%" style="stop-color:#00d9ff;stop-opacity:1" />
+									<stop offset="100%" style="stop-color:#ff00ff;stop-opacity:1" />
+								</linearGradient>
+							</defs>
+							<polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" 
+									 fill="none" stroke="url(#hexGradient)" stroke-width="2"/>
+							<polygon points="50,15 85,32.5 85,67.5 50,85 15,67.5 15,32.5" 
+									 fill="none" stroke="#00d9ff" stroke-width="1.5" opacity="0.6"/>
+							<circle cx="50" cy="50" r="20" fill="none" stroke="#ff00ff" stroke-width="2"/>
+							<path d="M50,35 L50,50 L60,60" stroke="#00d9ff" stroke-width="3" 
+								  stroke-linecap="round" fill="none"/>
+						</svg>
 					</div>
-					<div class="form-group">
-						<b>{{ form.password.label }}</b>
-						<div style="position: relative;">
-							{{ form.password(class="form-control", value=password, placeholder="Password") }}
-						</div>
+					
+					<div class="welcome-text">
+						<h2>WELCOME BACK</h2>
+						<p>Access your secure account</p>
 					</div>
-					<div class="row pt-3">
-						<div class="col-md-6">
-							<a class="float-left align-text-to-button" href="{{ url_for('auth.reset_password') }}">
-								Forgot Password?
-							</a>
+					
+					<form method="POST" class="login-form">
+						<div class="form-group">
+							<label>USERNAME</label>
+							<div class="input-container">
+								<input type="text" name="name" class="form-control" placeholder="Enter username" required autofocus>
+								<span class="input-border"></span>
+							</div>
 						</div>
-						<div class="col-md-6">
-							{{ form.submit(class="btn btn-md btn-primary btn-outlined float-right", id="login-submit") }}
+						
+						<div class="form-group">
+							<label>PASSWORD</label>
+							<div class="input-container">
+								<input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+								<button type="button" class="toggle-password" onclick="togglePassword()">
+									<svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+										<circle cx="12" cy="12" r="3"></circle>
+									</svg>
+								</button>
+								<span class="input-border"></span>
+							</div>
 						</div>
+						
+						<div class="form-actions">
+							<a href="{{ url_for('auth.reset_password') }}" class="forgot-link">Forgot password?</a>
+						</div>
+						
+						<button type="submit" class="btn-submit">
+							<span>LOGIN</span>
+							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<line x1="5" y1="12" x2="19" y2="12"></line>
+								<polyline points="12 5 19 12 12 19"></polyline>
+							</svg>
+						</button>
+					</form>
+					
+					<div class="form-footer">
+						<p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
 					</div>
-					{{ form.nonce() }}
-				</form>
-				{% endwith %}
-				
-				<!-- Security Badge -->
-				<div class="security-badge">
-					<small>Secure Connection Established</small>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+/* Login Card */
+.login-card {
+	background: linear-gradient(135deg, #0a0a14 0%, #1a1a2e 100%);
+	border: 2px solid rgba(0, 217, 255, 0.4);
+	border-radius: 0;
+	padding: 3rem 2.5rem;
+	margin: 2rem auto;
+	max-width: 500px;
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 217, 255, 0.2);
+	position: relative;
+	overflow: hidden;
+}
+
+/* Network Animation Canvas */
+.network-canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	opacity: 0.3;
+}
+
+/* Card Content */
+.card-content {
+	position: relative;
+	z-index: 1;
+}
+
+/* Top Border Animation */
+.login-card::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: linear-gradient(90deg, transparent, #00d9ff, #ff00ff, transparent);
+	animation: border-flow 3s linear infinite;
+}
+
+@keyframes border-flow {
+	0% { transform: translateX(-100%); }
+	100% { transform: translateX(100%); }
+}
+
+.login-card:hover {
+	border-color: #00d9ff;
+	box-shadow: 0 12px 40px rgba(0, 217, 255, 0.3), 0 0 80px rgba(255, 0, 255, 0.2);
+}
+
+/* Login Icon */
+.login-icon {
+	text-align: center;
+	margin-bottom: 2rem;
+}
+
+.login-icon svg {
+	filter: drop-shadow(0 0 10px rgba(0, 217, 255, 0.6));
+	animation: float-icon 3s ease-in-out infinite;
+}
+
+@keyframes float-icon {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-10px); }
+}
+
+/* Welcome Text */
+.welcome-text {
+	text-align: center;
+	margin-bottom: 2rem;
+}
+
+.welcome-text h2 {
+	color: #00d9ff;
+	font-family: "Rajdhani", sans-serif;
+	font-size: 1.8rem;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+	letter-spacing: 2px;
+}
+
+.welcome-text p {
+	color: #e0f4ff;
+	font-size: 0.95rem;
+}
+
+/* Form Groups */
+.form-group {
+	margin-bottom: 2rem;
+}
+
+.form-group label {
+	display: block;
+	color: #00d9ff;
+	font-family: "Rajdhani", sans-serif;
+	font-size: 0.85rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	margin-bottom: 0.75rem;
+}
+
+/* Input Container */
+.input-container {
+	position: relative;
+}
+
+.input-container .form-control {
+	width: 100%;
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid rgba(0, 217, 255, 0.3);
+	border-radius: 0;
+	color: #e0f4ff;
+	font-size: 1.1rem;
+	padding: 0.75rem 0;
+	transition: all 0.3s ease;
+}
+
+.input-container .form-control:focus {
+	outline: none;
+	border-bottom-color: #00d9ff;
+	background: transparent;
+	box-shadow: none;
+}
+
+.input-container .form-control:focus ~ .input-border {
+	width: 100%;
+}
+
+.input-border {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	height: 2px;
+	background: linear-gradient(90deg, #00d9ff, #ff00ff);
+	transition: width 0.3s ease;
+}
+
+.toggle-password {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	color: #00d9ff;
+	cursor: pointer;
+	padding: 0.5rem;
+	transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+	color: #ff00ff;
+}
+
+/* Form Actions */
+.form-actions {
+	text-align: right;
+	margin-bottom: 2rem;
+}
+
+.forgot-link {
+	color: #00d9ff;
+	font-size: 0.9rem;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+	color: #ff00ff;
+}
+
+/* Submit Button */
+.btn-submit {
+	width: 100%;
+	background: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%);
+	border: none;
+	color: #000;
+	font-family: "Rajdhani", sans-serif;
+	font-size: 1.1rem;
+	font-weight: 700;
+	letter-spacing: 3px;
+	padding: 1.25rem 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	transition: all 0.3s ease;
+}
+
+.btn-submit::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+	transition: left 0.5s ease;
+}
+
+.btn-submit:hover::before {
+	left: 100%;
+}
+
+.btn-submit:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 30px rgba(0, 217, 255, 0.5);
+}
+
+/* Form Footer */
+.form-footer {
+	text-align: center;
+	margin-top: 2rem;
+	padding-top: 2rem;
+	border-top: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+.form-footer p {
+	color: #e0f4ff;
+	font-size: 0.95rem;
+}
+
+.form-footer a {
+	color: #00d9ff;
+	text-decoration: none;
+	font-weight: 600;
+	transition: color 0.3s ease;
+}
+
+.form-footer a:hover {
+	color: #ff00ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.login-card {
+		padding: 2rem 1.5rem;
+		margin: 1rem;
+	}
+	
+	.login-icon svg {
+		width: 60px;
+		height: 60px;
+	}
+}
+</style>
+
+<script>
+// Network Animation
+document.addEventListener('DOMContentLoaded', function() {
+	const card = document.querySelector('.login-card');
+	const canvas = card.querySelector('.network-canvas');
+	const ctx = canvas.getContext('2d');
+	
+	canvas.width = card.offsetWidth;
+	canvas.height = card.offsetHeight;
+	
+	// Network nodes
+	const nodes = [];
+	const nodeCount = 12;
+	const connectionDistance = 120;
+	
+	class Node {
+		constructor() {
+			this.x = Math.random() * canvas.width;
+			this.y = Math.random() * canvas.height;
+			this.vx = (Math.random() - 0.5) * 0.3;
+			this.vy = (Math.random() - 0.5) * 0.3;
+			this.radius = Math.random() * 2 + 1;
+		}
+		
+		update() {
+			this.x += this.vx;
+			this.y += this.vy;
+			
+			if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+			if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+		}
+		
+		draw() {
+			ctx.beginPath();
+			ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+			ctx.fillStyle = '#00d9ff';
+			ctx.fill();
+			
+			ctx.shadowBlur = 10;
+			ctx.shadowColor = '#00d9ff';
+			ctx.fill();
+			ctx.shadowBlur = 0;
+		}
+	}
+	
+	// Initialize nodes
+	for (let i = 0; i < nodeCount; i++) {
+		nodes.push(new Node());
+	}
+	
+	// Animation loop
+	function animate() {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		
+		nodes.forEach(node => {
+			node.update();
+			node.draw();
+		});
+		
+		// Draw connections
+		for (let i = 0; i < nodes.length; i++) {
+			for (let j = i + 1; j < nodes.length; j++) {
+				const dx = nodes[i].x - nodes[j].x;
+				const dy = nodes[i].y - nodes[j].y;
+				const distance = Math.sqrt(dx * dx + dy * dy);
+				
+				if (distance < connectionDistance) {
+					const opacity = (1 - distance / connectionDistance) * 0.4;
+					ctx.beginPath();
+					ctx.moveTo(nodes[i].x, nodes[i].y);
+					ctx.lineTo(nodes[j].x, nodes[j].y);
+					ctx.strokeStyle = `rgba(0, 217, 255, ${opacity})`;
+					ctx.lineWidth = 1;
+					ctx.stroke();
+				}
+			}
+		}
+		
+		requestAnimationFrame(animate);
+	}
+	
+	animate();
+	
+	// Resize handler
+	window.addEventListener('resize', function() {
+		canvas.width = card.offsetWidth;
+		canvas.height = card.offsetHeight;
+	});
+});
+
+// Password Toggle
+function togglePassword() {
+	const input = document.getElementById('password');
+	const icon = document.getElementById('eyeIcon');
+	
+	if (input.type === 'password') {
+		input.type = 'text';
+		icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+	} else {
+		input.type = 'password';
+		icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+	}
+}
+</script>
 {% endblock %}
 
 {% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-	const form = document.getElementById('login-form');
-	const submitBtn = document.getElementById('login-submit');
-	const inputs = form.querySelectorAll('.form-control');
-	
-	// Add loading state on form submission
-	form.addEventListener('submit', function(e) {
-		submitBtn.classList.add('loading');
-		submitBtn.disabled = true;
-	});
-	
-	// Real-time input validation
-	inputs.forEach(function(input) {
-		input.addEventListener('blur', function() {
-			if (this.value.trim() !== '') {
-				this.classList.add('is-valid');
-				this.classList.remove('is-invalid');
-			} else {
-				this.classList.add('is-invalid');
-				this.classList.remove('is-valid');
-			}
-		});
-		
-		input.addEventListener('input', function() {
-			this.classList.remove('is-valid', 'is-invalid');
-		});
-	});
-	
-	// Password visibility toggle
-	const passwordInput = form.querySelector('input[type="password"]');
-	if (passwordInput) {
-		const toggleBtn = document.createElement('button');
-		toggleBtn.type = 'button';
-		toggleBtn.className = 'password-toggle';
-		toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
-		
-		passwordInput.parentNode.appendChild(toggleBtn);
-		
-		toggleBtn.addEventListener('click', function() {
-			if (passwordInput.type === 'password') {
-				passwordInput.type = 'text';
-				this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-			} else {
-				passwordInput.type = 'password';
-				this.innerHTML = '<i class="fas fa-eye"></i>';
-			}
-		});
-	}
-	
-	// Enter key submission enhancement
-	inputs.forEach(function(input) {
-		input.addEventListener('keypress', function(e) {
-			if (e.key === 'Enter') {
-				e.preventDefault();
-				form.submit();
-			}
-		});
-	});
-	
-	// Focus first input
-	const firstInput = form.querySelector('.form-control');
-	if (firstInput) {
-		setTimeout(function() {
-			firstInput.focus();
-		}, 300);
-	}
-});
-</script>
 {% endblock %}

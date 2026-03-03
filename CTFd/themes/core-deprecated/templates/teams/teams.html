@@ -1,57 +1,10 @@
 {% extends "base.html" %}
 
-{% block stylesheets %}
-<style>
-.jumbotron {
-	background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-	border-bottom: 4px solid #f5f5f5;
-	border-top: 4px solid #f5f5f5;
-	padding: 3rem 1rem;
-	margin-bottom: 3rem;
-	box-shadow: 0 6px 0 rgba(0,0,0,0.8);
-}
-
-.jumbotron h1 {
-	color: #f5f5f5;
-	font-family: "Rajdhani", sans-serif;
-	font-weight: 900;
-	font-size: 3rem;
-	text-transform: uppercase;
-	letter-spacing: 6px;
-	text-shadow: 3px 3px 0 #000;
-}
-
-.form-inline .form-control {
-	border: 2px solid #2a2a2a;
-}
-
-.btn-primary {
-	background: #f5f5f5 !important;
-	color: #0a0a0a !important;
-	border: 2px solid #0a0a0a !important;
-	font-weight: 900;
-}
-
-.btn-primary:hover {
-	background: #fff !important;
-	transform: translate(-2px, -2px);
-	box-shadow: 4px 4px 0 rgba(0,0,0,0.8);
-}
-
-.page-select {
-	background: #1a1a1a;
-	color: #e0e0e0;
-	border: 2px solid #2a2a2a;
-	padding: 0.5rem;
-	font-weight: 700;
-}
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="jumbotron">
 	<div class="container">
-		<h1>Teams</h1>
+		<h1>TEAMS</h1>
+		<p class="lead" style="color: #e0f4ff; margin-top: 1rem;">Competing teams</p>
 	</div>
 </div>
 <div class="container">
@@ -76,7 +29,7 @@
 				</div>
 				<div class="form-group col-md-2">
 					<button type="submit" class="btn btn-primary w-100">
-						<i class="fas fa-search" aria-hidden="true"></i>
+						SEARCH
 					</button>
 				</div>
 			</form>
@@ -91,10 +44,10 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<td><b>Team</b></td>
-						<td><b>Website</b></td>
-						<td class="d-none d-md-table-cell d-lg-table-cell"><b>Affiliation</b></td>
-						<td class="d-none d-md-table-cell d-lg-table-cell"><b>Country</b></td>
+						<td><b>TEAM</b></td>
+						<td><b>WEBSITE</b></td>
+						<td class="d-none d-md-table-cell d-lg-table-cell"><b>AFFILIATION</b></td>
+						<td class="d-none d-md-table-cell d-lg-table-cell"><b>COUNTRY</b></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -108,14 +61,14 @@
 						{% endif %}
 						{% if team.oauth_id %}
 							<a href="https://majorleaguecyber.org/t/{{ team.name }}">
-								<span class="badge badge-primary">Official</span>
+								<span class="badge badge-primary">OFFICIAL</span>
 							</a>
 						{% endif %}
 						</td>
 						<td class="text-center" style="width: 10px;">
 							{% if team.website and (team.website.startswith('http://') or team.website.startswith('https://')) %}
 								<a href="{{ team.website }}" target="_blank" rel="noopener">
-									<i class="fas fa-external-link-alt" data-toggle="tooltip" data-placement="top" title="{{ team.website }}"></i>
+									<i class="fas fa-external-link-alt" data-toggle="tooltip" data-placement="top" title="{{ team.website }}" style="color: #00d9ff;"></i>
 								</a>
 							{% endif %}
 						</td>
@@ -149,10 +102,11 @@
 	{% if teams.pages > 1 %}
 	<div class="row">
 		<div class="col-md-12">
-			<div class="text-center">Page
-				<br>
+			<div class="pagination-container text-center">
+				<strong style="color: #00d9ff;">PAGE</strong>
+				<br><br>
 				{% if teams.page != 1 %}
-				<a href="{{ prev_page }}">&lt;&lt;&lt;</a>
+				<a href="{{ prev_page }}" class="page-nav">&lt;&lt;&lt;</a>
 				{% endif %}
 				<select class="page-select">
 					{% for page in range(1, teams.pages + 1) %}
@@ -160,13 +114,79 @@
 					{% endfor %}
 				</select>
 				{% if teams.next_num %}
-				<a href="{{ next_page }}">&gt;&gt;&gt;</a>
+				<a href="{{ next_page }}" class="page-nav">&gt;&gt;&gt;</a>
 				{% endif %}
 			</div>
 		</div>
 	</div>
 	{% endif %}
 </div>
+
+<style>
+/* Teams Page Specific Styles */
+.form-inline {
+    margin-bottom: 2rem;
+}
+
+.form-inline .form-group {
+    margin-bottom: 1rem;
+}
+
+/* Page Navigation Links */
+.page-nav {
+    color: #00d9ff;
+    text-decoration: none;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.page-nav:hover {
+    color: #ff00ff;
+    text-decoration: none;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+    transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-inline .form-group {
+        margin-bottom: 1rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+    
+    // Page select change handler
+    const pageSelect = document.querySelector('.page-select');
+    if (pageSelect) {
+        pageSelect.addEventListener('change', function() {
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('page', this.value);
+            window.location.href = currentUrl.toString();
+        });
+    }
+    
+    // Add hover effect for rows
+    const teamRows = document.querySelectorAll('.table tbody tr');
+    teamRows.forEach(function(row) {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(10px)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
+    });
+});
+</script>
 {% endblock %}
 
 {% block scripts %}
