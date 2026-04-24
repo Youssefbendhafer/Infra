@@ -1,34 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<div class="jumbotron">
-		<div class="container">
-			<h1>
-				{% trans %}Notifications{% endtrans %}
-			</h1>
-		</div>
-	</div>
-	<div class="container">
-		{% if not notifications %}
-		<h2 class="text-center">
-			{% trans %}There are no notifications yet{% endtrans %}
-		</h2>
-		{% endif %}
-		{% for notification in notifications %}
-		<div class="card bg-body-tertiary mb-4">
-			<div class="card-body">
-				<h3 class="card-title">{{ notification.title }}</h3>
-				<blockquote class="blockquote mb-0">
-					<p>{{ notification.html }}</p>
-					<small class="text-muted"><span data-time="{{ notification.date | isoformat }}"></span></small>
-				</blockquote>
-			</div>
-		</div>
-		{% endfor %}
-	</div>
+  <div class="cs-pageheader text-center">
+    <div class="cs-marquee"><span>· transmission · transmission · incoming · transmission · incoming · transmission ·</span></div>
+    <div class="container">
+      <h1>{% trans %}Notifications{% endtrans %}</h1>
+      <p class="cs-sub">— transmissions from the operators —</p>
+    </div>
+  </div>
+
+  <div class="container">
+    {% if not notifications %}
+      <div class="text-center" style="padding:5rem 0;">
+        <i class="fas fa-broadcast-tower" style="font-size:2.6rem; color:var(--teal-dim); opacity:0.55;"></i>
+        <h2 class="mt-3" style="font-family:var(--f-hand) !important; color:var(--muted) !important; font-size:1.1rem !important; letter-spacing:0.18em;">
+          {% trans %}There are no notifications yet{% endtrans %}
+        </h2>
+        <p class="cs-mono" style="color:var(--muted); font-size:0.7rem; letter-spacing:0.2em; margin-top:0.5rem;">
+          // signal · silent
+        </p>
+      </div>
+    {% endif %}
+
+    {% for notification in notifications %}
+      <div class="cs-panel mb-4">
+        <span class="cs-panel-tag">// transmission · {{ loop.index }}</span>
+        <div style="display:flex; align-items:flex-start; gap:1rem;">
+          <div style="font-family:var(--f-mono); color:var(--teal); font-size:1.4rem; opacity:0.7;">
+            <i class="fas fa-satellite-dish"></i>
+          </div>
+          <div style="flex:1;">
+            <h3 class="card-title" style="font-family:var(--f-title) !important; color:var(--teal) !important; font-size:1.4rem !important; margin-bottom:0.5rem;">
+              {{ notification.title }}
+            </h3>
+            <div class="cs-hand" style="color:var(--bone); font-size:0.95rem; line-height:1.6; letter-spacing:0.02em;">
+              {{ notification.html }}
+            </div>
+            <small class="cs-mono d-block mt-3" style="color:var(--muted); font-size:0.66rem; letter-spacing:0.18em;">
+              <i class="fas fa-clock me-1"></i>
+              <span data-time="{{ notification.date | isoformat }}"></span>
+            </small>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}
 
 {% block scripts %}
   {{ Assets.js("assets/js/notifications.js") }}
 {% endblock %}
-

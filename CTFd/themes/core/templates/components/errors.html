@@ -1,6 +1,7 @@
 <div>
   {% for info in infos %}
     <div class="alert alert-info alert-dismissible text-center" role="alert">
+      <i class="fas fa-info-circle me-2"></i>
       <span>{{ info }}</span>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
         <span aria-hidden="true"></span>
@@ -10,7 +11,8 @@
 
   {% for error in errors %}
     <div class="alert alert-danger alert-dismissible text-center" role="alert">
-      <span>{{ error }}</span>
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      <span class="cs-mono" style="letter-spacing:0.06em;">{{ error }}</span>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
         <span aria-hidden="true"></span>
       </button>

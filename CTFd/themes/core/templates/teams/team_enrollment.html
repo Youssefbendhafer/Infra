@@ -1,44 +1,53 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="jumbotron">
+  <div class="cs-pageheader text-center">
+    <div class="cs-marquee"><span>· enroll · join · forge · enroll · join · forge · enroll · join · forge ·</span></div>
     <div class="container">
       <h1>{% trans %}Team{% endtrans %}</h1>
+      <p class="cs-sub">— pick your side of the storm —</p>
     </div>
   </div>
+
   <div class="container">
     <div class="row">
-      <div class="col-md-6 offset-md-3 text-center">
-        <p class="h2">{% trans %}Welcome to{% endtrans %} {{ Configs.ctf_name }}!</p>
-        <p>
-          {% trans %}In order to participate you must either join or create a team.{% endtrans %}
-        </p>
+      <div class="col-md-8 offset-md-2">
+        <div class="cs-panel text-center">
+          <span class="cs-panel-tag">// enrollment</span>
+
+          <p class="h2" style="font-family:var(--f-title) !important; color:var(--teal) !important; letter-spacing:0.04em;">
+            {% trans %}Welcome to{% endtrans %} {{ Configs.ctf_name }}!
+          </p>
+          <p class="cs-hand mt-3" style="color:var(--bone); font-size:0.95rem; letter-spacing:0.02em;">
+            {% trans %}In order to participate you must either join or create a team.{% endtrans %}
+          </p>
+
+          {% if integrations.mlc() %}
+            <div class="row mt-4">
+              <div class="col-md-8 offset-md-2">
+                <a class="btn btn-primary w-100" href="{{ url_for('auth.oauth_login') }}">{% trans %}Play with Official Team{% endtrans %}</a>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-5 offset-md-1">
+                <a class="btn btn-secondary w-100" href="{{ url_for('teams.join') }}">{% trans %}Join Unofficial Team{% endtrans %}</a>
+              </div>
+              <div class="col-md-5">
+                <a class="btn btn-secondary w-100" href="{{ url_for('teams.new') }}">{% trans %}Create Unofficial Team{% endtrans %}</a>
+              </div>
+            </div>
+          {% else %}
+            <div class="row mt-4">
+              <div class="col-md-5 offset-md-1">
+                <a class="btn btn-primary w-100" href="{{ url_for('teams.join') }}">{% trans %}Join Team{% endtrans %}</a>
+              </div>
+              <div class="col-md-5">
+                <a class="btn btn-primary w-100" href="{{ url_for('teams.new') }}">{% trans %}Create Team{% endtrans %}</a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
-
-    {% if integrations.mlc() %}
-      <div class="row">
-        <div class="col-md-6 offset-md-3 text-center">
-          <a class="btn btn-primary w-100" href="{{ url_for('auth.oauth_login') }}">{% trans %}Play with Official Team{% endtrans %}</a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="mt-3 col-md-3 offset-md-3 text-center">
-          <a class="btn btn-outline-info w-100" href="{{ url_for('teams.join') }}">{% trans %}Join Unofficial Team{% endtrans %}</a>
-        </div>
-        <div class="mt-3 col-md-3 text-center">
-          <a class="btn btn-outline-info w-100" href="{{ url_for('teams.new') }}">{% trans %}Create Unofficial Team{% endtrans %}</a>
-        </div>
-      </div>
-    {% else %}
-      <div class="row">
-        <div class="mt-3 col-sm-4 col-md-3 offset-sm-2 offset-md-3 text-center">
-          <a class="btn btn-primary w-100" href="{{ url_for('teams.join') }}">{% trans %}Join Team{% endtrans %}</a>
-        </div>
-        <div class="mt-3 col-sm-4 col-md-3 text-center">
-          <a class="btn btn-primary w-100" href="{{ url_for('teams.new') }}">{% trans %}Create Team{% endtrans %}</a>
-        </div>
-      </div>
-    {% endif %}
   </div>
 {% endblock %}

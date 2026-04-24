@@ -1,17 +1,25 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <div class="container">
-    <a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand">
-      {% if Configs.ctf_logo %}
-        <img
-            class="img-responsive ctf_logo"
-            src="{{ url_for('views.files', path=Configs.ctf_logo) }}"
-            alt="{{ Configs.ctf_name }}"
-            height="25"
-        >
-      {% else %}
-        {{ Configs.ctf_name }}
-      {% endif %}
+    <a href="{{ url_for('views.static_html', route='/') }}" class="navbar-brand d-flex align-items-center">
+      <span class="cs-dot" style="margin-right:10px;" aria-hidden="true"></span>
+      <img
+          class="img-responsive ctf_logo cs-brand-logo"
+          src="/themes/core/static/cyberstorm/pool.png"
+          alt="{{ Configs.ctf_name or 'Cyberstorm' }}"
+      >
     </a>
+    <style>
+      .cs-brand-logo {
+        height: 34px;
+        width: auto;
+        filter: drop-shadow(0 0 10px var(--teal-glow));
+        transition: filter 0.2s, transform 0.2s;
+      }
+      .navbar-brand:hover .cs-brand-logo {
+        filter: drop-shadow(0 0 18px rgba(60,179,113,0.6));
+        transform: translateY(-1px);
+      }
+    </style>
 
     <button
         class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#base-navbars"

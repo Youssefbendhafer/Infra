@@ -4,24 +4,45 @@
 {{ super() }}
 <style>
 .card-radio:checked + .card {
-	background-color: transparent !important;
-	border-color: #a3d39c;
-	box-shadow: 0 0 0 0.1rem #a3d39c;
+	background-color: rgba(60,179,113,0.05) !important;
+	border-color: var(--teal) !important;
+	box-shadow: 0 0 0 1px var(--teal), 0 0 22px rgba(60,179,113,0.18) !important;
 	transition: background-color 0.3s, border-color 0.3s;
 }
 .card-radio:checked + .card .card-radio-clone{
 	visibility: visible !important;
 }
-.card:hover {
-	cursor: pointer;
+.card:hover { cursor: pointer; }
+.card-radio + .card .card-title h5 {
+	font-family: var(--f-title) !important;
+	color: var(--teal) !important;
+	letter-spacing: 0.06em;
+}
+.card-radio + .card ul li {
+	font-family: var(--f-hand) !important;
+	color: var(--bone) !important;
+	font-size: 0.78rem !important;
+	letter-spacing: 0.02em;
+	line-height: 1.5;
+	list-style: none;
+	padding-left: 1rem;
+	position: relative;
+}
+.card-radio + .card ul li::before {
+	content: '›';
+	position: absolute;
+	left: 0;
+	color: var(--teal);
 }
 </style>
 {% endblock %}
 
 {% block content %}
-	<div class="jumbotron">
+	<div class="cs-pageheader text-center">
+		<div class="cs-marquee"><span>· system boot · cyberstorm initialization · system boot · cyberstorm initialization ·</span></div>
 		<div class="container">
 			<h1>{% trans %}Setup{% endtrans %}</h1>
+			<p class="cs-sub">— configure the storm —</p>
 		</div>
 	</div>
 	<div class="container">

@@ -1,12 +1,14 @@
 <div x-data>
   <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div x-ref="toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
-      <div class="toast-header">
+    <div x-ref="toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false"
+         style="background:var(--card); border:1px solid var(--teal-dim); border-radius:2px; box-shadow:0 8px 32px rgba(0,0,0,0.7), 0 0 24px rgba(60,179,113,0.12);">
+      <div class="toast-header" style="background:var(--deep); border-bottom:1px solid var(--border); color:var(--teal); font-family:var(--f-mono); letter-spacing:0.12em;">
+        <i class="fas fa-satellite-dish me-2" style="color:var(--teal);"></i>
         <strong class="me-auto" x-text="$store.toast.title"></strong>
-        <small>just now</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        <small class="cs-mono" style="color:var(--muted); letter-spacing:0.16em;">// just now</small>
+        <button type="button" class="btn-close ms-2" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
-      <div class="toast-body" x-html="$store.toast.html">
+      <div class="toast-body cs-hand" style="color:var(--bone); font-size:0.92rem;" x-html="$store.toast.html">
       </div>
     </div>
   </div>
@@ -21,7 +23,7 @@
           <h5 class="modal-title" x-text="$store.modal.title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body cs-hand" style="color:var(--bone); font-size:0.94rem;">
           <p x-html="$store.modal.html"></p>
         </div>
         <div class="modal-footer">

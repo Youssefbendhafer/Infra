@@ -1,90 +1,125 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="jumbotron">
+  <div class="cs-pageheader">
+    <div class="cs-marquee"><span>· operative · dossier · classified · operative · dossier · classified ·</span></div>
     <div class="container">
-      <h1>{{ user.name }}</h1>
+      <div class="row align-items-center">
+        <div class="col-md-3 text-center">
+          <div class="cs-id-photo">
+            <span class="cs-id-photo-tag">// id-{{ user.id }}</span>
+            <i class="fas fa-user-secret"></i>
+          </div>
+          <div class="cs-stamp cs-stamp-ok mt-3">
+            {% if user.verified %}verified · human{% else %}status · pending{% endif %}
+          </div>
+        </div>
 
-      {% if user.team_id %}
-        <h2>
-          <a href="{{ url_for('teams.public', team_id=user.team_id) }}">
-						<span class="badge bg-secondary">
-							{{ user.team.name }}
-						</span>
-          </a>
-        </h2>
-      {% endif %}
+        <div class="col-md-9 text-start">
+          <p class="cs-mono" style="color:var(--muted); font-size:0.7rem; letter-spacing:0.22em; margin-bottom:0.2rem;">
+            // codename
+          </p>
+          <h1 style="text-align:left;">{{ user.name }}</h1>
 
-      <div class="pt-2">
-        {% if user.oauth_id %}
-          <a href="https://majorleaguecyber.org/u/{{ user.name }}">
-            <h3 class="d-inline-block mx-1"><span class="badge rounded-pill bg-primary">{% trans %}Official{% endtrans %}</span></h3>
-          </a>
-        {% endif %}
+          {% if user.team_id %}
+            <a href="{{ url_for('teams.public', team_id=user.team_id) }}" style="display:inline-block; margin-top:0.4rem;">
+              <span class="badge bg-secondary"><i class="fas fa-users me-1"></i>{{ user.team.name }}</span>
+            </a>
+          {% endif %}
 
-        {% if user.affiliation %}
-          <h3 class="d-inline-block mx-1">
-            <span class="badge rounded-pill bg-primary">{{ user.affiliation }}</span>
-          </h3>
-        {% endif %}
-
-        {% if user.country %}
-          <h3 class="d-inline-block mx-1">
-            <span class="badge rounded-pill bg-primary">
+          <div class="pt-2">
+            {% if user.oauth_id %}
+              <a href="https://majorleaguecyber.org/u/{{ user.name }}">
+                <span class="badge rounded-pill bg-primary me-1">{% trans %}Official{% endtrans %}</span>
+              </a>
+            {% endif %}
+            {% if user.affiliation %}
+              <span class="badge rounded-pill bg-primary me-1">{{ user.affiliation }}</span>
+            {% endif %}
+            {% if user.country %}
+              <span class="badge rounded-pill bg-primary me-1">
                 <i class="flag-{{ user.country.lower() }}"></i>
                 {{ lookup_country_code(user.country) }}
-            </span>
-          </h3>
-        {% endif %}
-      </div>
+              </span>
+            {% endif %}
+            {% if user.bracket_id %}
+              <span class="badge bg-secondary me-1">{{ user.bracket.name }}</span>
+            {% endif %}
+          </div>
 
-      {% if user.bracket_id %}
-        <div class="pt-2">
-          <h2>
-            <span class="badge text-bg-light">
-              {{ user.bracket.name }}
-            </span>
-          </h2>
+          <div class="pt-3">
+            {% for field in user.fields %}
+              <div class="cs-mono" style="color:var(--bone); font-size:0.86rem;">
+                <span style="color:var(--muted); font-size:0.7rem; letter-spacing:0.16em;">{{ field.name }} ›</span>
+                {{ field.value }}
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="row pt-4 cs-stat-row">
+            {% if account.place %}
+              <div class="col-6 col-md-4">
+                <p class="cs-mono cs-stat-label">// rank</p>
+                <p class="cs-stat-value">{{ account.place }}</p>
+              </div>
+            {% endif %}
+            {% if account %}
+              <div class="col-6 col-md-4">
+                <p class="cs-mono cs-stat-label">// score</p>
+                <p class="cs-stat-value">{{ account.get_score(admin=True) }}</p>
+              </div>
+            {% endif %}
+            {% if user.website %}
+              <div class="col-12 col-md-4">
+                <p class="cs-mono cs-stat-label">// link</p>
+                <a href="{{ user.website }}" target="_blank" rel="noopener" class="cs-mono">
+                  <i class="fas fa-external-link-alt me-1"></i>{{ user.website | truncate(28) }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
         </div>
-      {% endif %}
-
-      <div class="pt-2">
-        {% for field in user.fields %}
-          <h3 class="d-block">
-            {{ field.name }}: {{ field.value }}
-          </h3>
-        {% endfor %}
-      </div>
-
-      {% if user.fields %}
-        <hr class="w-50 mx-auto">
-      {% endif %}
-
-      <div>
-        <h2 class="text-center">
-          {% if account.place %}
-            {{ account.place }} <small>place</small>
-          {% endif %}
-        </h2>
-        <h2 class="text-center">
-          {% if account %}
-            {{ account.get_score(admin=True) }} <small>points</small>
-          {% endif %}
-        </h2>
-      </div>
-
-      <div class="pt-3">
-        {% if user.website %}
-          <a href="{{ user.website }}" target="_blank" style="color: inherit;" rel="noopener">
-            <i
-                class="fas fa-external-link-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
-                title="{{ user.website }}"
-            ></i>
-          </a>
-        {% endif %}
       </div>
     </div>
   </div>
+
+  <style>
+    .cs-id-photo {
+      width: 130px; height: 160px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--teal-dim);
+      box-shadow: inset 0 0 30px rgba(60,179,113,0.05), 0 0 26px rgba(60,179,113,0.1);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      filter: hue-rotate(-5deg) contrast(1.05);
+    }
+    .cs-id-photo i {
+      font-size: 4.4rem;
+      color: var(--teal);
+      opacity: 0.55;
+      filter: drop-shadow(0 0 16px rgba(60,179,113,0.4));
+    }
+    .cs-id-photo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.18) 3px, rgba(0,0,0,0.18) 4px);
+      pointer-events: none;
+    }
+    .cs-id-photo-tag {
+      position: absolute;
+      top: -10px; left: 8px;
+      background: var(--void);
+      padding: 0 6px;
+      font-family: var(--f-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+    .cs-stat-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.18em; margin-bottom: 0.2rem; }
+    .cs-stat-value { font-family: var(--f-title); font-size: 1.6rem; color: var(--teal); letter-spacing: 0.04em; margin: 0; }
+  </style>
+
   <div class="container">
     {% include "components/errors.html" %}
 
@@ -93,31 +128,27 @@
 
     {% if solves or awards %}
       {% if awards %}
-        <div class="row">
+        <div class="row mb-4">
           <div class="col-md-12">
-            <h3>{% trans %}Awards{% endtrans %}</h3>
-
+            <div class="category-header mb-3"><h3>// awards · trophies</h3></div>
           </div>
           {% for award in awards %}
-            <div class="col-md-3 col-sm-6">
-              <p class="text-center">
-                <i class="award-icon award-{{ award.icon }} fa-2x"></i>
-                <br>
-                <strong>{{ award.name }}</strong>
-              </p>
-              <p class="text-center">{{ award.category or "" }}</p>
-              <p class="text-center">{{ award.description or "" }}</p>
-              <p class="text-center">{{ award.value }}</p>
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="cs-panel text-center" style="padding:1.2rem;">
+                <i class="award-icon award-{{ award.icon }} fa-2x" style="color:var(--teal); filter:drop-shadow(0 0 10px var(--teal-glow));"></i>
+                <p class="mt-2" style="font-family:var(--f-title); color:var(--teal); letter-spacing:0.04em; margin:0.5rem 0 0.2rem;">{{ award.name }}</p>
+                <p class="cs-mono" style="color:var(--muted); font-size:0.7rem; margin:0;">{{ award.category or "" }}</p>
+                <p class="cs-hand" style="color:var(--bone); font-size:0.82rem; margin:0.3rem 0;">{{ award.description or "" }}</p>
+                <p class="cs-mono" style="color:var(--teal);">{{ award.value }}</p>
+              </div>
             </div>
           {% endfor %}
         </div>
       {% endif %}
 
-      <br>
-
       <div class="row">
         <div class="col-md-12">
-          <h3>{% trans %}Solves{% endtrans %}</h3>
+          <div class="category-header mb-3"><h3>// log · solves</h3></div>
           <table class="table table-striped align-middle">
             <thead>
             <tr>
@@ -136,10 +167,8 @@
                   </a>
                 </td>
                 <td class="d-none d-md-block d-lg-block">{{ solve.challenge.category }}</td>
-                <td>{{ solve.challenge.value }}</td>
-                <td class="solve-time">
-                  <span data-time="{{ solve.date | isoformat }}"></span>
-                </td>
+                <td><span class="cs-mono">{{ solve.challenge.value }}</span></td>
+                <td class="solve-time"><span data-time="{{ solve.date | isoformat }}"></span></td>
               </tr>
             {% endfor %}
             </tbody>
@@ -151,56 +180,40 @@
 
       <div class="row" x-data="UserGraphs">
         <div class="col-md-6 d-none d-md-block d-lg-block py-4">
+          <p class="cs-mono" style="color:var(--muted); font-size:0.7rem; letter-spacing:0.18em; margin-bottom:0.5rem;">// solve · ratio</p>
           <div class="progress">
-            <div 
-              class="progress-bar" 
-              role="progressbar" 
-              :style="{ width: `${getSolvePercentage()}%`, 'background-color': 'rgb(0, 209, 64)' }" 
-            >
-            </div>
-            <div 
-              class="progress-bar" 
-              role="progressbar" 
-              :style="{ width: `${getFailPercentage()}%`, 'background-color': 'rgb(207, 38, 0)' }"
-            >
-            </div>
+            <div class="progress-bar" role="progressbar"
+              :style="{ width: `${getSolvePercentage()}%`, 'background-color': '#3cb371' }"></div>
+            <div class="progress-bar" role="progressbar"
+              :style="{ width: `${getFailPercentage()}%`, 'background-color': '#8b1a1a' }"></div>
           </div>
-          <div class="ps-2 float-start">
-            <svg height="16" width="16">
-              <circle cx="8" cy="8" r="5" fill="rgb(0, 209, 64)" />
-            </svg>
-            <small x-text="`Solves (${getSolvePercentage()}%)`"></small>
+          <div class="ps-2 float-start mt-1">
+            <svg height="14" width="14"><circle cx="7" cy="7" r="4" fill="#3cb371"/></svg>
+            <small class="cs-mono" x-text="`Solves (${getSolvePercentage()}%)`"></small>
           </div>
-          <div class="ps-2 float-start">
-            <svg height="16" width="16">
-              <circle cx="8" cy="8" r="5" fill="rgb(207, 38, 0)" />
-            </svg>
-            <small x-text="`Fails (${getFailPercentage()}%)`"></small>
+          <div class="ps-2 float-start mt-1">
+            <svg height="14" width="14"><circle cx="7" cy="7" r="4" fill="#8b1a1a"/></svg>
+            <small class="cs-mono" x-text="`Fails (${getFailPercentage()}%)`"></small>
           </div>
         </div>
         <div class="col-md-6 d-none d-md-block d-lg-block py-4">
+          <p class="cs-mono" style="color:var(--muted); font-size:0.7rem; letter-spacing:0.18em; margin-bottom:0.5rem;">// category · breakdown</p>
           <div class="progress">
             <template x-for="category in getCategoryBreakdown()" :key="category.name">
-              <div 
-                class="progress-bar" 
-                role="progressbar" 
-                :style="{ width: `${category.percent}%`, 'background-color': category.color }"
-              >
-              </div>
+              <div class="progress-bar" role="progressbar"
+                :style="{ width: `${category.percent}%`, 'background-color': category.color }"></div>
             </template>
           </div>
           <template x-for="category in getCategoryBreakdown()" :key="category.name">
-            <div class="ps-2 float-start">
-              <svg height="16" width="16">
-                <circle cx="8" cy="8" r="5" :fill="category.color" />
-              </svg>
-              <small x-text="`${category.name} (${category.percent}%)`"></small>
+            <div class="ps-2 float-start mt-1">
+              <svg height="14" width="14"><circle cx="7" cy="7" r="4" :fill="category.color"/></svg>
+              <small class="cs-mono" x-text="`${category.name} (${category.percent}%)`"></small>
             </div>
           </template>
         </div>
         <br class="clearfix">
         <div class="col-md-12 d-none d-md-block d-lg-block py-4">
-          <div id="score-graph" x-ref="scoregraph" class="w-100 d-flex align-items-center">
+          <div id="score-graph" x-ref="scoregraph" class="w-100 d-flex align-items-center" style="border:1px solid var(--border); border-radius:2px; background:var(--card); min-height:280px; padding:1rem;">
             <div class="text-center w-100">
               <i class="fas fa-circle-notch fa-spin fa-3x fa-fw spinner"></i>
             </div>
@@ -208,9 +221,10 @@
         </div>
       </div>
     {% else %}
-      <div class="row min-vh-25">
-        <h3 class="opacity-50 text-center w-100 justify-content-center align-self-center">
-          {% trans %}No solves yet{% endtrans %}
+      <div class="row min-vh-25" style="padding:5rem 0;">
+        <h3 class="opacity-50 text-center w-100 justify-content-center align-self-center cs-hand"
+            style="font-family:var(--f-hand) !important; color:var(--muted) !important; letter-spacing:0.12em;">
+          // {% trans %}No solves yet{% endtrans %}
         </h3>
       </div>
     {% endif %}
@@ -220,4 +234,3 @@
 {% block scripts %}
   {{ Assets.js("assets/js/users/private.js") }}
 {% endblock %}
-

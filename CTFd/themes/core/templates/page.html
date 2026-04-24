@@ -1,9 +1,254 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="container">
-    {{ content | safe }}
-  </div>
+  {# Show the cinematic Cyberstorm hero only on the index route. Any other page
+     keeps the standard admin-CMS content render. #}
+  {% if request.path in ['/', '/index', '/index.html'] %}
+
+    <section class="cs-hero">
+      <div class="cs-hero-vignette" aria-hidden="true"></div>
+
+      <header class="cs-hero-top">
+        <img src="/themes/core/static/cyberstorm/pool.png" alt="Cyberstorm" class="cs-hero-logo">
+        <div class="cs-hero-meta cs-mono">
+          <span class="cs-dot"></span> live · transmission
+        </div>
+      </header>
+
+      <div class="cs-hero-stage">
+        <div class="cs-hero-bubble">
+          <div class="cs-hero-bubble-screen">
+            <p class="cs-hero-bubble-line typing">are you ready</p>
+            <p class="cs-hero-bubble-line typing delay-1">for the storm?</p>
+            <p class="cs-hero-bubble-cursor">_</p>
+          </div>
+          <div class="cs-hero-bubble-tag cs-mono">// signal · 04:24 AM</div>
+        </div>
+
+        <p class="cs-hero-tagline-line cs-hand">— it knows your face. it knows your packets. —</p>
+      </div>
+
+      <div class="cs-hero-foot">
+        <div class="cs-hero-actions">
+          {% if authed() %}
+            <a href="{{ url_for('challenges.listing') }}" class="btn btn-primary cs-btn-hero">
+              <i class="fas fa-skull-crossbones me-2"></i> Enter the storm
+            </a>
+            <a href="{{ url_for('scoreboard.listing') }}" class="btn btn-secondary cs-btn-hero">
+              Scoreboard
+            </a>
+          {% else %}
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary cs-btn-hero">
+              <i class="fas fa-user-plus me-2"></i> Register
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-secondary cs-btn-hero">
+              Login
+            </a>
+          {% endif %}
+        </div>
+
+        <div class="cs-hero-hint cs-mono">
+          <span>[Q]</span> exit · <span>[ENTER]</span> proceed
+        </div>
+      </div>
+    </section>
+
+  {% else %}
+    <div class="container" style="padding-top:3rem; padding-bottom:3rem;">
+      <div class="cs-panel">
+        <span class="cs-panel-tag">// dossier</span>
+        <div class="cs-page-content">
+          {{ content | safe }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <style>
+    /* Lock the index hero to a single screen — no scroll, no footer */
+    body:has(.cs-hero) { overflow: hidden; height: 100vh; }
+    body:has(.cs-hero) .footer { display: none; }
+    body:has(.cs-hero) .cs-tape { display: none; }
+    body:has(.cs-hero) main[role="main"] { padding-top: 56px; min-height: 0; height: calc(100vh - 0px); }
+
+    .cs-hero {
+      position: relative;
+      height: calc(100vh - 56px);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 1.4rem 3rem;
+      overflow: hidden;
+    }
+    .cs-hero-vignette {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(60,179,113,0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 100% at 50% 50%, transparent 30%, rgba(0,0,0,0.7) 95%);
+    }
+
+    .cs-hero-top {
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 2;
+    }
+    .cs-hero-logo {
+      height: 60px;
+      filter: drop-shadow(0 0 18px rgba(60,179,113,0.45)) drop-shadow(0 0 38px rgba(60,179,113,0.15));
+    }
+    .cs-hero-meta { color: var(--muted); font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; }
+
+    .cs-hero-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.6rem;
+      position: relative; z-index: 2;
+    }
+    .cs-hero-tagline-line {
+      color: var(--bone);
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      margin: 0;
+      text-shadow: 0 0 12px rgba(60,179,113,0.35);
+      opacity: 0;
+      animation: cs-fade-in 0.8s 3.6s forwards;
+    }
+    @keyframes cs-fade-in { to { opacity: 1; } }
+
+    /* Chat-screen bubble */
+    .cs-hero-bubble {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+    }
+    .cs-hero-bubble-screen {
+      position: relative;
+      background: #051410;
+      border: 1px solid var(--teal-dim);
+      padding: 2.2rem 2.4rem 1.6rem;
+      box-shadow:
+        inset 0 0 60px rgba(60,179,113,0.08),
+        0 0 60px rgba(60,179,113,0.18),
+        0 0 120px rgba(60,179,113,0.08);
+      border-radius: 4px;
+    }
+    .cs-hero-bubble-screen::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(60,179,113,0.05) 3px 4px);
+      pointer-events: none;
+    }
+    .cs-hero-bubble-line {
+      font-family: var(--f-title);
+      font-weight: 700;
+      font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+      color: #d8fff0;
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+      margin: 0 0 0.3rem;
+      text-transform: uppercase;
+      text-shadow: 0 0 24px rgba(60,179,113,0.65), 0 0 50px rgba(60,179,113,0.3);
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid transparent;
+    }
+    .typing {
+      width: 0;
+      animation: cs-type 1.4s steps(24) 0.4s forwards, cs-caret 0.8s step-end infinite;
+      border-right-color: var(--teal);
+    }
+    .delay-1 { animation-delay: 1.9s, 1.9s; }
+    @keyframes cs-type { from { width: 0; } to { width: 100%; } }
+    @keyframes cs-caret { 50% { border-right-color: transparent; } }
+    .cs-hero-bubble-cursor {
+      font-family: var(--f-mono);
+      color: var(--teal);
+      font-size: 1.4rem;
+      margin: 0.6rem 0 0;
+      animation: cs-blink 1s steps(2) infinite;
+      opacity: 0;
+      animation-delay: 3.4s;
+      animation-fill-mode: forwards;
+    }
+    @keyframes cs-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .cs-hero-bubble-tag {
+      position: absolute; top: -10px; right: 1rem;
+      background: var(--void);
+      padding: 0 8px;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .cs-hero-foot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      position: relative; z-index: 2;
+    }
+    .cs-hero-actions { display: flex; gap: 0.8rem; }
+    .cs-btn-hero {
+      padding: 0.75rem 1.8rem !important;
+      font-size: 0.82rem !important;
+      letter-spacing: 0.18em !important;
+    }
+
+    .cs-hero-hint {
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.55;
+    }
+    .cs-hero-hint span {
+      display: inline-block;
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      margin: 0 4px;
+      color: var(--bone);
+    }
+
+    @media (max-width: 700px) {
+      .cs-hero { padding: 1rem; }
+      .cs-hero-logo { height: 44px; }
+      .cs-hero-bubble { max-width: 100%; }
+      .cs-hero-actions { flex-wrap: wrap; justify-content: center; width: 100%; }
+      .cs-hero-actions .btn { flex: 1; min-width: 140px; }
+    }
+
+    /* Below-hero page wrapper for non-index pages */
+    .cs-page-content { color: var(--bone); font-family: var(--f-body); font-size: 1rem; line-height: 1.7; }
+    .cs-page-content h1, .cs-page-content h2, .cs-page-content h3, .cs-page-content h4 {
+      font-family: var(--f-title) !important;
+      color: var(--teal) !important;
+      letter-spacing: 0.05em;
+      margin-top: 1.5rem;
+    }
+    .cs-page-content blockquote {
+      border-left: 2px solid var(--teal);
+      padding-left: 1rem;
+      font-family: var(--f-hand);
+      color: var(--muted);
+      margin: 1.5rem 0;
+    }
+    .cs-page-content code {
+      background: var(--deep);
+      padding: 2px 6px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+    }
+    .cs-page-content pre {
+      background: var(--deep);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 2px;
+      overflow-x: auto;
+    }
+    .cs-page-content img { max-width: 100%; border: 1px solid var(--border); border-radius: 2px; }
+    .cs-page-content table { width: 100%; margin: 1.2rem 0; }
+  </style>
 {% endblock %}
 
 {% block scripts %}

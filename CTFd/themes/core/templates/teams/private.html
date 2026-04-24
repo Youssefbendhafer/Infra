@@ -210,110 +210,117 @@
     </div>
   </div>
 
-  <div class="jumbotron">
+  <div class="cs-pageheader">
+    <div class="cs-marquee"><span>· faction · dossier · classified · faction · dossier · classified ·</span></div>
     <div class="container">
-      <h1 id="team-id" team-id="{{ team.id }}">{{ team.name }}</h1>
-      {% if team.oauth_id %}
-        <a href="https://majorleaguecyber.org/t/{{ team.name }}">
-          <h3><span class="badge bg-primary">{% trans %}Official{% endtrans %}</span></h3>
-        </a>
-      {% endif %}
-
-      {% if team.affiliation %}
-        <h3 class="d-inline-block">
-          <span class="badge bg-primary">{{ team.affiliation }}</span>
-        </h3>
-      {% endif %}
-
-      {% if team.country %}
-        <h3 class="d-inline-block">
-          <span class="badge bg-primary">
-            <i class="flag-{{ team.country.lower() }}"></i>
-            {{ lookup_country_code(team.country) }}
-          </span>
-        </h3>
-      {% endif %}
-
-      {% if team.bracket_id %}
-        <div class="pt-2">
-          <h2>
-            <span class="badge text-bg-light">
-              {{ team.bracket.name }}
-            </span>
-          </h2>
+      <div class="row align-items-center">
+        <div class="col-md-3 text-center">
+          <div class="cs-callsign">
+            <span class="cs-callsign-label">// faction</span>
+            <span class="cs-callsign-id">#{{ "%04d" | format(team.id) }}</span>
+          </div>
         </div>
-      {% endif %}
+        <div class="col-md-9 text-start">
+          <p class="cs-mono" style="color:var(--muted); font-size:0.7rem; letter-spacing:0.22em; margin-bottom:0.2rem;">
+            // faction · codename
+          </p>
+          <h1 id="team-id" team-id="{{ team.id }}" style="text-align:left;">{{ team.name }}</h1>
 
-      {% for field in team.fields %}
-        <h3 class="d-block">
-          {{ field.name }}: {{ field.value }}
-        </h3>
-      {% endfor %}
+          <div class="pt-2">
+            {% if team.oauth_id %}
+              <a href="https://majorleaguecyber.org/t/{{ team.name }}">
+                <span class="badge bg-primary me-1">{% trans %}Official{% endtrans %}</span>
+              </a>
+            {% endif %}
+            {% if team.affiliation %}
+              <span class="badge bg-primary me-1">{{ team.affiliation }}</span>
+            {% endif %}
+            {% if team.country %}
+              <span class="badge bg-primary me-1">
+                <i class="flag-{{ team.country.lower() }}"></i>
+                {{ lookup_country_code(team.country) }}
+              </span>
+            {% endif %}
+            {% if team.bracket_id %}
+              <span class="badge bg-secondary me-1">{{ team.bracket.name }}</span>
+            {% endif %}
+          </div>
 
-      <h2 id="team-place" class="text-center">
-        {# This intentionally hides the team's place when scores are hidden because this can be their internal profile
-           and we don't want to leak their place in the CTF. #}
-        {# Public page hiding is done at the route level #}
-        {% if scores_visible() %}
-          {% if place %}
-            {{ place }}
-            <small>{% trans %}place{% endtrans %}</small>
-          {% endif %}
-        {% endif %}
-      </h2>
+          <div class="pt-2">
+            {% for field in team.fields %}
+              <div class="cs-mono" style="color:var(--bone); font-size:0.86rem;">
+                <span style="color:var(--muted); font-size:0.7rem; letter-spacing:0.16em;">{{ field.name }} ›</span>
+                {{ field.value }}
+              </div>
+            {% endfor %}
+          </div>
 
-      <h2 id="team-score" class="text-center">
-        {% if score %}
-          {{ score }}
-          <small>{% trans %}points{% endtrans %}</small>
-        {% endif %}
-      </h2>
+          <div class="row pt-3 cs-stat-row">
+            {% if scores_visible() and place %}
+              <div class="col-6 col-md-4">
+                <p class="cs-mono cs-stat-label">// rank</p>
+                <p id="team-place" class="cs-stat-value">{{ place }}</p>
+              </div>
+            {% endif %}
+            {% if score %}
+              <div class="col-6 col-md-4">
+                <p class="cs-mono cs-stat-label">// score</p>
+                <p id="team-score" class="cs-stat-value">{{ score }}</p>
+              </div>
+            {% endif %}
+          </div>
 
-      <div x-data="CaptainMenu">
-        <a class="edit-team text-white" @click="editTeam()">
-          <i
-              class="cursor-pointer fas fa-cogs fa-2x px-2 pt-3"
-              data-bs-toggle="tooltip" data-bs-placement="top"
-              title="Edit Team"
-          ></i>
-        </a>
-        <a class="edit-captain text-white" @click="chooseCaptain()">
-          <i
-              class="cursor-pointer fas fa-user-tag fa-2x px-2 pt-3"
-              data-bs-toggle="tooltip" data-bs-placement="top"
-              title="Choose Captain"
-          ></i>
-        </a>
-
-        <a class="invite-members text-white" @click="inviteMembers()">
-          <i
-              class="cursor-pointer fas fa-ticket-alt fa-2x px-2 pt-3"
-              data-bs-toggle="tooltip" data-bs-placement="top"
-              title="Invite Users"
-          ></i>
-        </a>
-        <a class="disband-team text-white" @click="disbandTeam()">
-          <i
-              class="cursor-pointer fas fa-trash-alt fa-2x px-2 pt-3"
-              data-bs-toggle="tooltip" data-bs-placement="top"
-              title="Disband Team"
-          ></i>
-        </a>
-      </div>
-
-      <div class="pt-3">{% if team.website and (team.website.startswith('http://') or team.website.startswith('https://')) %}
-          <a href="{{ team.website }}" target="_blank" style="color: inherit;" rel="noopener">
-            <i
-                class="fas fa-external-link-alt fa-2x px-2 pt-2"
-                data-toggle="tooltip" data-placement="top"
-                title="{{ team.website }}"
-            ></i>
-          </a>
-        {% endif %}
+          <div class="pt-3" x-data="CaptainMenu" style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <a class="edit-team cs-action-btn" @click="editTeam()" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Team">
+              <i class="cursor-pointer fas fa-cogs"></i>
+            </a>
+            <a class="edit-captain cs-action-btn" @click="chooseCaptain()" data-bs-toggle="tooltip" data-bs-placement="top" title="Choose Captain">
+              <i class="cursor-pointer fas fa-user-tag"></i>
+            </a>
+            <a class="invite-members cs-action-btn" @click="inviteMembers()" data-bs-toggle="tooltip" data-bs-placement="top" title="Invite Users">
+              <i class="cursor-pointer fas fa-ticket-alt"></i>
+            </a>
+            <a class="disband-team cs-action-btn cs-action-danger" @click="disbandTeam()" data-bs-toggle="tooltip" data-bs-placement="top" title="Disband Team">
+              <i class="cursor-pointer fas fa-trash-alt"></i>
+            </a>
+            {% if team.website and (team.website.startswith('http://') or team.website.startswith('https://')) %}
+              <a class="cs-action-btn" href="{{ team.website }}" target="_blank" rel="noopener" data-bs-toggle="tooltip" title="{{ team.website }}">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            {% endif %}
+          </div>
         </div>
       </div>
-
+    </div>
   </div>
+
+  <style>
+    .cs-callsign {
+      display: inline-flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 1.1rem 1.3rem;
+      border: 1px solid var(--teal-dim);
+      border-radius: 2px;
+      background: linear-gradient(180deg, rgba(60,179,113,0.06), transparent);
+      box-shadow: inset 0 0 24px rgba(60,179,113,0.04), 0 0 18px rgba(60,179,113,0.08);
+    }
+    .cs-callsign-label { font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; }
+    .cs-callsign-id    { font-family: var(--f-title); font-size: 1.6rem; color: var(--teal); letter-spacing: 0.1em; text-shadow: 0 0 14px var(--teal-glow); }
+    .cs-action-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--bone) !important;
+      background: var(--card);
+      transition: all 0.2s;
+    }
+    .cs-action-btn:hover {
+      border-color: var(--teal-dim);
+      color: var(--teal) !important;
+      box-shadow: 0 0 12px rgba(60,179,113,0.15);
+    }
+    .cs-action-btn.cs-action-danger:hover { border-color: var(--red); color: #c05050 !important; box-shadow: 0 0 12px rgba(139,26,26,0.2); }
+  </style>
 
   <div class="container">
     {% include "components/errors.html" %}
@@ -322,7 +329,7 @@
 
     <div class="row min-vh-25">
       <div class="col-md-12">
-        <h3>{% trans %}Members{% endtrans %}</h3>
+        <div class="category-header mb-3"><h3>// faction · members</h3></div>
         <table class="table table-striped align-middle">
           <thead>
           <tr>
@@ -356,32 +363,27 @@
 
     {% if solves or awards %}
       {% if awards %}
-        <div class="row">
+        <div class="row mt-4">
           <div class="col-md-12">
-            <h3>{% trans %}Awards{% endtrans %}</h3>
+            <div class="category-header mb-3"><h3>// awards · trophies</h3></div>
           </div>
-
           {% for award in awards %}
-            <div class="col-md-3 col-sm-6">
-              <p class="text-center">
-                <i class="award-icon award-{{ award.icon }} fa-2x"></i>
-                <br>
-                <strong>{{ award.name }}</strong>
-              </p>
-              {% if award.category %}<p class="text-center">{{ award.category }}</p>{% endif %}
-              {% if award.description %}<p class="text-center">{{ award.description }}</p>{% endif %}
-              <p class="text-center">{{ award.value }}</p>
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="cs-panel text-center" style="padding:1.2rem;">
+                <i class="award-icon award-{{ award.icon }} fa-2x" style="color:var(--teal); filter:drop-shadow(0 0 10px var(--teal-glow));"></i>
+                <p class="mt-2" style="font-family:var(--f-title); color:var(--teal); letter-spacing:0.04em; margin:0.5rem 0 0.2rem;">{{ award.name }}</p>
+                {% if award.category %}<p class="cs-mono" style="color:var(--muted); font-size:0.7rem; margin:0;">{{ award.category }}</p>{% endif %}
+                {% if award.description %}<p class="cs-hand" style="color:var(--bone); font-size:0.82rem; margin:0.3rem 0;">{{ award.description }}</p>{% endif %}
+                <p class="cs-mono" style="color:var(--teal);">{{ award.value }}</p>
+              </div>
             </div>
           {% endfor %}
-
         </div>
-
-        <br>
       {% endif %}
 
-      <div class="row">
+      <div class="row mt-4">
         <div class="col-md-12">
-          <h3>{% trans %}Solves{% endtrans %}</h3>
+          <div class="category-header mb-3"><h3>// log · solves</h3></div>
           <table class="table table-striped align-middle">
             <thead>
             <tr>
