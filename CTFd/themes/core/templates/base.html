@@ -66,7 +66,7 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 9000;
+      z-index: 4;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
       background-repeat: repeat;
       mix-blend-mode: overlay;
@@ -78,7 +78,7 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 8999;
+      z-index: 3;
       background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.65) 100%);
     }
 
@@ -493,11 +493,77 @@
     .alert-warning { background: rgba(212,168,67,0.1) !important; border-color: #8b7030 !important; color: #c0a050 !important; }
 
     /* ══ MODAL ══ */
+    /* No page dim and no click-capture — the modal stands on its own with a
+       teal-glow border. The X button handles dismissal. */
+    .modal-backdrop {
+      pointer-events: none !important;
+      background-color: transparent !important;
+    }
+    .modal {
+      z-index: 100055 !important;
+      pointer-events: auto !important;
+    }
+    .modal-dialog {
+      margin-top: 5rem !important;   /* breathing room below the fixed navbar */
+      pointer-events: none;
+    }
     .modal-content {
-      background: var(--surface) !important;
-      border: 1px solid var(--border) !important;
+      background: var(--card) !important;
+      border: 1px solid var(--teal-dim) !important;
       border-radius: 2px !important;
-      box-shadow: 0 12px 60px rgba(0,0,0,0.8), 0 0 40px rgba(60,179,113,0.06) !important;
+      box-shadow:
+        0 12px 80px rgba(60,179,113,0.18),
+        0 0 60px rgba(0,0,0,0.95),
+        inset 0 0 40px rgba(60,179,113,0.04) !important;
+      pointer-events: auto !important;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Subtle teal corner-bracket accents on every modal */
+    .modal-content::before,
+    .modal-content::after {
+      content: '';
+      position: absolute;
+      width: 22px; height: 22px;
+      border: 1px solid var(--teal);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    .modal-content::before { top: 6px; left: 6px; border-right: none; border-bottom: none; }
+    .modal-content::after  { bottom: 6px; right: 6px; border-left: none; border-top: none; }
+
+    /* Binary number rain — flanks the challenge modal only */
+    #challenge-window::before,
+    #challenge-window::after {
+      content: "10110100\A 01001011\A 11010010\A 00101101\A 11000110\A 10101010\A 01010101\A 11110000\A 00001111\A 10110100\A 01001011\A 11010010\A 00101101\A 11000110\A 10101010\A 01010101\A 11110000\A 00001111";
+      position: absolute;
+      top: 0;
+      height: 100%;
+      font-family: var(--f-mono);
+      font-size: 0.72rem;
+      color: rgba(60,179,113,0.18);
+      white-space: pre;
+      pointer-events: none;
+      letter-spacing: 0.3em;
+      line-height: 1.9;
+      text-shadow: 0 0 8px var(--teal-glow);
+      animation: cs-binary-fall 22s linear infinite;
+      mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+      overflow: hidden;
+      z-index: -1;
+    }
+    #challenge-window::before { left: 3vw; }
+    #challenge-window::after  { right: 3vw; animation-direction: reverse; animation-duration: 28s; }
+
+    @keyframes cs-binary-fall {
+      from { transform: translateY(-25%); }
+      to   { transform: translateY(25%); }
+    }
+    @media (max-width: 768px) {
+      /* Hide binary streams on small screens — they'd cover the form */
+      #challenge-window::before,
+      #challenge-window::after { display: none; }
     }
     .modal-header {
       background: var(--deep) !important;
@@ -607,7 +673,7 @@
 
     /* Animated scanlines */
     .cs-scanlines {
-      position: fixed; inset: 0; z-index: 8997; pointer-events: none;
+      position: fixed; inset: 0; z-index: 2; pointer-events: none;
       background: repeating-linear-gradient(
         to bottom,
         transparent 0,
@@ -656,7 +722,7 @@
 /* Vertical caution-tape band on far right */
     .cs-tape {
       position: fixed; top: 56px; bottom: 0; right: 0; width: 14px;
-      z-index: 2; pointer-events: none;
+      z-index: 1; pointer-events: none;
       background: repeating-linear-gradient(
         135deg,
         rgba(60,179,113,0.18) 0 12px,
@@ -795,9 +861,12 @@
       50%      { opacity: 0.35; transform: scale(0.78); }
     }
 
-    /* Z-stacking: keep app above ambient art (NEVER touch .modal — Bootstrap manages
-       its own z-index 1055 and modal-backdrop 1050; lowering it hides modal behind backdrop) */
-    main[role="main"], .footer { position: relative; z-index: 5; }
+    /* Z-stacking: ambient art (cs-grid z=0, cs-tape z=1, cs-scanlines z=2,
+       body::before z=3, body::after z=4) all sit BELOW Bootstrap's modal-backdrop
+       (z=1050) and modal (z=1055). Do NOT give <main> a z-index — that creates a
+       stacking context that traps the modal below the backdrop and freezes the page. */
+    main[role="main"], .footer { position: relative; }
+    .footer { isolation: isolate; }  /* keep footer above ambient art without touching modal stacking */
     .navbar { z-index: 1030; }  /* Bootstrap fixed-top default */
 
     @media (max-width: 768px) {

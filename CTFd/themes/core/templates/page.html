@@ -9,7 +9,6 @@
       <div class="cs-hero-vignette" aria-hidden="true"></div>
 
       <header class="cs-hero-top">
-        <img src="/themes/core/static/cyberstorm/pool.png" alt="Cyberstorm" class="cs-hero-logo">
         <div class="cs-hero-meta cs-mono">
           <span class="cs-dot"></span> live · transmission
         </div>
@@ -18,9 +17,12 @@
       <div class="cs-hero-stage">
         <div class="cs-hero-bubble">
           <div class="cs-hero-bubble-screen">
-            <p class="cs-hero-bubble-line typing">are you ready</p>
-            <p class="cs-hero-bubble-line typing delay-1">for the storm?</p>
-            <p class="cs-hero-bubble-cursor">_</p>
+            <img src="/themes/core/static/cyberstorm/pool.png" alt="Cyberstorm" class="cs-hero-bubble-logo">
+            <div class="cs-hero-bubble-text">
+              <p class="cs-hero-bubble-line typing">are you ready</p>
+              <p class="cs-hero-bubble-line typing delay-1">for the storm?</p>
+              <p class="cs-hero-bubble-cursor">_</p>
+            </div>
           </div>
           <div class="cs-hero-bubble-tag cs-mono">// signal · 04:24 AM</div>
         </div>
@@ -87,12 +89,8 @@
     }
 
     .cs-hero-top {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; justify-content: flex-end;
       position: relative; z-index: 2;
-    }
-    .cs-hero-logo {
-      height: 60px;
-      filter: drop-shadow(0 0 18px rgba(60,179,113,0.45)) drop-shadow(0 0 38px rgba(60,179,113,0.15));
     }
     .cs-hero-meta { color: var(--muted); font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; }
 
@@ -131,6 +129,30 @@
         0 0 60px rgba(60,179,113,0.18),
         0 0 120px rgba(60,179,113,0.08);
       border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .cs-hero-bubble-logo {
+      width: clamp(78px, 11vw, 130px);
+      height: auto;
+      flex-shrink: 0;
+      filter:
+        drop-shadow(0 0 16px rgba(60,179,113,0.55))
+        drop-shadow(0 0 36px rgba(60,179,113,0.22));
+      animation: cs-logo-breathe 3.6s ease-in-out infinite;
+      position: relative;
+      z-index: 2;
+    }
+    @keyframes cs-logo-breathe {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 16px rgba(60,179,113,0.55)) drop-shadow(0 0 36px rgba(60,179,113,0.22)); }
+      50%      { transform: scale(1.04); filter: drop-shadow(0 0 22px rgba(60,179,113,0.8))  drop-shadow(0 0 48px rgba(60,179,113,0.32)); }
+    }
+    .cs-hero-bubble-text {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
     }
     .cs-hero-bubble-screen::before {
       content: '';
@@ -212,8 +234,14 @@
 
     @media (max-width: 700px) {
       .cs-hero { padding: 1rem; }
-      .cs-hero-logo { height: 44px; }
       .cs-hero-bubble { max-width: 100%; }
+      .cs-hero-bubble-screen {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.6rem 1.4rem 1.2rem;
+      }
+      .cs-hero-bubble-logo { width: 70px; }
+      .cs-hero-bubble-text { width: 100%; text-align: center; }
       .cs-hero-actions { flex-wrap: wrap; justify-content: center; width: 100%; }
       .cs-hero-actions .btn { flex: 1; min-width: 140px; }
     }
