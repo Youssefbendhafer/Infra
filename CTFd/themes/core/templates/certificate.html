@@ -535,6 +535,12 @@
           var s = d.createElement('style');
           s.textContent = '*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}';
           d.head.appendChild(s);
+          // Inject font link into the cloned iframe so html2canvas resolves
+          // Major Mono Display / Share Tech Mono / Rajdhani correctly.
+          var fl = d.createElement('link');
+          fl.rel = 'stylesheet';
+          fl.href = 'https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Major+Mono+Display&display=swap';
+          d.head.appendChild(fl);
         }
       });
     }).then(function(canvas){
