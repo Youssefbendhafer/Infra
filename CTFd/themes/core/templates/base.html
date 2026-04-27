@@ -503,9 +503,20 @@
       z-index: 100055 !important;
       pointer-events: auto !important;
     }
+    /* Center the dialog vertically + lock background scroll so the modal
+       stays put while the user reads. */
+    .modal.show { display: flex !important; }
     .modal-dialog {
-      margin-top: 5rem !important;   /* breathing room below the fixed navbar */
+      margin: auto !important;
       pointer-events: none;
+      max-height: calc(100vh - 4rem);
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    .modal-dialog > * { width: 100%; }
+    body.modal-open, html:has(.modal.show) {
+      overflow: hidden !important;
     }
     .modal-content {
       background: var(--card) !important;
@@ -518,6 +529,22 @@
       pointer-events: auto !important;
       position: relative;
       overflow: hidden;
+      max-height: calc(100vh - 4rem);
+      display: flex;
+      flex-direction: column;
+    }
+    /* Inner body of the challenge modal scrolls — header/footer stay pinned. */
+    .modal-content > .modal-body,
+    .modal-content > form > .modal-body {
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    .modal-content > .modal-body::-webkit-scrollbar { width: 5px; }
+    .modal-content > .modal-body::-webkit-scrollbar-track { background: transparent; }
+    .modal-content > .modal-body::-webkit-scrollbar-thumb {
+      background: var(--teal-dim); border-radius: 2px;
     }
     /* Subtle teal corner-bracket accents on every modal */
     .modal-content::before,
