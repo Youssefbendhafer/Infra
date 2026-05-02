@@ -499,24 +499,47 @@
       pointer-events: none !important;
       background-color: transparent !important;
     }
+    /* Force the modal to viewport coordinates (immune to ancestor transforms,
+       page scroll, navbar overlap). */
     .modal {
+      position: fixed !important;
+      inset: 0 !important;
       z-index: 100055 !important;
+      pointer-events: none !important;   /* let clicks fall through except on dialog */
+      overflow: hidden !important;       /* the modal itself never scrolls */
+    }
+    /* When Bootstrap toggles .show, become a flex centering container. */
+    .modal.show {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       pointer-events: auto !important;
     }
-    /* Center the dialog vertically + lock background scroll so the modal
-       stays put while the user reads. */
-    .modal.show { display: flex !important; }
-    .modal-dialog {
-      margin: auto !important;
-      pointer-events: none;
-      max-height: calc(100vh - 4rem);
-      display: flex;
-      align-items: center;
-      width: 100%;
+    /* Kill the close-animation flash: Bootstrap removes .show first then
+       waits ~150ms before setting display:none, during which the dialog
+       falls back to top-left. Force hide immediately + disable the slide
+       transform that would offset the dialog from center. */
+    .modal:not(.show) { display: none !important; }
+    .modal.fade .modal-dialog,
+    .modal.fade.show .modal-dialog {
+      transform: none !important;
+      transition: none !important;
     }
-    .modal-dialog > * { width: 100%; }
-    body.modal-open, html:has(.modal.show) {
+    .modal-dialog {
+      margin: 0 !important;
+      pointer-events: none;
+      max-height: calc(100vh - 5rem);   /* leave 5rem room for the 56px navbar */
+      width: 100%;
+      display: flex;                     /* lets modal-content inherit a height ceiling */
+      align-items: stretch;
+    }
+    /* Lock background scroll while a modal is open. Three mechanisms so
+       at least one fires across browsers / Bootstrap versions. */
+    body.modal-open,
+    html.modal-open,
+    html:has(.modal.show) {
       overflow: hidden !important;
+      touch-action: none !important;     /* iOS / touch devices */
     }
     .modal-content {
       background: var(--card) !important;
@@ -529,17 +552,20 @@
       pointer-events: auto !important;
       position: relative;
       overflow: hidden;
-      max-height: calc(100vh - 4rem);
+      width: 100%;
+      max-height: calc(100vh - 5rem);
       display: flex;
       flex-direction: column;
+      margin: auto;                       /* secondary centering inside dialog */
     }
-    /* Inner body of the challenge modal scrolls — header/footer stay pinned. */
+    /* Inner body of the modal scrolls — modal box itself stays put. */
     .modal-content > .modal-body,
     .modal-content > form > .modal-body {
       overflow-y: auto;
       overflow-x: hidden;
       flex: 1 1 auto;
       min-height: 0;
+      overscroll-behavior: contain;       /* don't bubble scroll to the page */
     }
     .modal-content > .modal-body::-webkit-scrollbar { width: 5px; }
     .modal-content > .modal-body::-webkit-scrollbar-track { background: transparent; }

@@ -346,14 +346,6 @@ def settings():
     )
 
 
-@views.route("/certificate", methods=["GET"])
-@authed_only
-def certificate():
-    user = get_current_user()
-    team = get_current_team()
-    return render_template("certificate.html", user=user, team=team)
-
-
 @views.route("/", defaults={"route": "index"})
 @views.route("/<path:route>")
 def static_html(route):
