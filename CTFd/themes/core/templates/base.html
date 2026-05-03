@@ -530,8 +530,8 @@
       pointer-events: none;
       max-height: calc(100vh - 5rem);   /* leave 5rem room for the 56px navbar */
       width: 100%;
-      display: flex;                     /* lets modal-content inherit a height ceiling */
-      align-items: stretch;
+      /* No inner flex — let modal-content size to its own natural content
+         so each challenge gets a snug box that re-centers automatically. */
     }
     /* Lock background scroll while a modal is open. Three mechanisms so
        at least one fires across browsers / Bootstrap versions. */
