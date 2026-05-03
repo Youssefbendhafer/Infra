@@ -499,42 +499,42 @@
       pointer-events: none !important;
       background-color: transparent !important;
     }
-    /* The modal is a fixed full-viewport container with INTERNAL PADDING
-       that creates a guaranteed safe zone (5rem top clears the 56px navbar,
-       2rem bottom for breathing). Everything inside sizes against the
-       padded area, so the dialog box can NEVER overflow above or below. */
+    /* Modal — Bootstrap standard pattern (modal-dialog-centered +
+       modal-dialog-scrollable applied universally) with explicit vh values
+       since percentage heights on flex items inside fixed containers are
+       unreliable across browsers. */
     .modal {
       position: fixed !important;
       inset: 0 !important;
       z-index: 100055 !important;
+      overflow: hidden !important;          /* whole-modal scroll disabled */
       pointer-events: none !important;
-      overflow: hidden !important;
-      padding: 5rem 1rem 2rem !important;
     }
-    /* When Bootstrap toggles .show, become a flex centering container. */
     .modal.show {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
       pointer-events: auto !important;
     }
-    /* Kill the close-animation flash and Bootstrap's slide transform. */
+    /* Hide instantly when .show is removed (no close-animation flash). */
     .modal:not(.show) { display: none !important; }
     .modal.fade .modal-dialog,
     .modal.fade.show .modal-dialog {
       transform: none !important;
       transition: none !important;
     }
-    /* Dialog fills the padded area's height; Bootstrap's max-width caps width. */
+
+    /* Dialog: vertically centered via min-height + flex (Bootstrap's
+       modal-dialog-centered pattern). Margin clears the 56px navbar (5rem
+       top) and gives 2rem at the bottom. Hard cap on max-height to absolutely
+       prevent overflow above/below the viewport. */
     .modal-dialog {
-      margin: 0 !important;
-      pointer-events: none;
-      max-height: 100% !important;       /* 100% of the modal's padded zone */
-      width: 100% !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
+      min-height: calc(100vh - 7rem) !important;
+      max-height: calc(100vh - 7rem) !important;
+      margin: 5rem auto 2rem !important;
+      pointer-events: none;
     }
+
     /* Lock background scroll while a modal is open. */
     body.modal-open,
     html.modal-open,
@@ -542,6 +542,7 @@
       overflow: hidden !important;
       touch-action: none !important;
     }
+
     .modal-content {
       background: var(--card) !important;
       border: 1px solid var(--teal-dim) !important;
@@ -553,23 +554,21 @@
       pointer-events: auto !important;
       position: relative;
       overflow: hidden !important;
-      width: 100% !important;
-      max-height: 100% !important;       /* capped by dialog → padded modal area */
+      width: 100%;
+      max-height: calc(100vh - 7rem) !important;   /* explicit, not % */
       display: flex !important;
       flex-direction: column !important;
     }
-    /* Modal-body scrolls internally — the visible box itself never moves. */
-    .modal-content > .modal-body,
-    .modal-content > form > .modal-body,
-    .modal-content > .modal-body > div {
-      overscroll-behavior: contain;
-    }
+
+    /* Modal-body scrolls internally — Bootstrap's modal-dialog-scrollable
+       pattern. The visible box stays put, only the description scrolls. */
     .modal-content > .modal-body,
     .modal-content > form > .modal-body {
       overflow-y: auto !important;
       overflow-x: hidden !important;
       flex: 1 1 auto !important;
       min-height: 0 !important;
+      overscroll-behavior: contain;
     }
     .modal-content > .modal-body::-webkit-scrollbar { width: 5px; }
     .modal-content > .modal-body::-webkit-scrollbar-track { background: transparent; }
