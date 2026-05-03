@@ -499,14 +499,17 @@
       pointer-events: none !important;
       background-color: transparent !important;
     }
-    /* Force the modal to viewport coordinates (immune to ancestor transforms,
-       page scroll, navbar overlap). */
+    /* The modal is a fixed full-viewport container with INTERNAL PADDING
+       that creates a guaranteed safe zone (5rem top clears the 56px navbar,
+       2rem bottom for breathing). Everything inside sizes against the
+       padded area, so the dialog box can NEVER overflow above or below. */
     .modal {
       position: fixed !important;
       inset: 0 !important;
       z-index: 100055 !important;
-      pointer-events: none !important;   /* let clicks fall through except on dialog */
-      overflow: hidden !important;       /* the modal itself never scrolls */
+      pointer-events: none !important;
+      overflow: hidden !important;
+      padding: 5rem 1rem 2rem !important;
     }
     /* When Bootstrap toggles .show, become a flex centering container. */
     .modal.show {
@@ -515,31 +518,29 @@
       justify-content: center !important;
       pointer-events: auto !important;
     }
-    /* Kill the close-animation flash: Bootstrap removes .show first then
-       waits ~150ms before setting display:none, during which the dialog
-       falls back to top-left. Force hide immediately + disable the slide
-       transform that would offset the dialog from center. */
+    /* Kill the close-animation flash and Bootstrap's slide transform. */
     .modal:not(.show) { display: none !important; }
     .modal.fade .modal-dialog,
     .modal.fade.show .modal-dialog {
       transform: none !important;
       transition: none !important;
     }
+    /* Dialog fills the padded area's height; Bootstrap's max-width caps width. */
     .modal-dialog {
       margin: 0 !important;
       pointer-events: none;
-      max-height: calc(100vh - 5rem);   /* leave 5rem room for the 56px navbar */
-      width: 100%;
-      /* No inner flex — let modal-content size to its own natural content
-         so each challenge gets a snug box that re-centers automatically. */
+      max-height: 100% !important;       /* 100% of the modal's padded zone */
+      width: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
-    /* Lock background scroll while a modal is open. Three mechanisms so
-       at least one fires across browsers / Bootstrap versions. */
+    /* Lock background scroll while a modal is open. */
     body.modal-open,
     html.modal-open,
     html:has(.modal.show) {
       overflow: hidden !important;
-      touch-action: none !important;     /* iOS / touch devices */
+      touch-action: none !important;
     }
     .modal-content {
       background: var(--card) !important;
@@ -551,21 +552,24 @@
         inset 0 0 40px rgba(60,179,113,0.04) !important;
       pointer-events: auto !important;
       position: relative;
-      overflow: hidden;
-      width: 100%;
-      max-height: calc(100vh - 5rem);
-      display: flex;
-      flex-direction: column;
-      margin: auto;                       /* secondary centering inside dialog */
+      overflow: hidden !important;
+      width: 100% !important;
+      max-height: 100% !important;       /* capped by dialog → padded modal area */
+      display: flex !important;
+      flex-direction: column !important;
     }
-    /* Inner body of the modal scrolls — modal box itself stays put. */
+    /* Modal-body scrolls internally — the visible box itself never moves. */
+    .modal-content > .modal-body,
+    .modal-content > form > .modal-body,
+    .modal-content > .modal-body > div {
+      overscroll-behavior: contain;
+    }
     .modal-content > .modal-body,
     .modal-content > form > .modal-body {
-      overflow-y: auto;
-      overflow-x: hidden;
-      flex: 1 1 auto;
-      min-height: 0;
-      overscroll-behavior: contain;       /* don't bubble scroll to the page */
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
     }
     .modal-content > .modal-body::-webkit-scrollbar { width: 5px; }
     .modal-content > .modal-body::-webkit-scrollbar-track { background: transparent; }

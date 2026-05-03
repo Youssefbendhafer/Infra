@@ -1,53 +1,4 @@
 <div :class="getStyles()" role="document" x-data="Challenge" x-init='id = {{ challenge.id }}; max_attempts = {{ max_attempts }}; attempts = {{ attempts }}; ratingValue = {{ (rating.get('value') if rating else None) | tojson }}; ratingReview = {{ (rating.get('review', '') if rating else None) | tojson }};'>
-  <style>
-    .cs-chl-tag {
-      display: inline-block; padding: 2px 9px;
-      font-family: var(--f-mono); font-size: 0.6rem; letter-spacing: 0.3em;
-      color: var(--muted); border: 1px solid var(--border); text-transform: uppercase;
-      border-radius: 2px; margin-bottom: 0.6rem;
-    }
-    .challenge-name {
-      font-family: var(--f-title) !important; color: var(--teal) !important;
-      letter-spacing: 0.06em; text-shadow: 0 0 26px var(--teal-glow), 2px 2px 0 rgba(0,0,0,0.6);
-      font-size: clamp(1.6rem, 3vw, 2.2rem) !important;
-    }
-    .challenge-value {
-      font-family: var(--f-mono) !important; color: var(--teal) !important;
-      letter-spacing: 0.1em; font-size: 1.3rem !important;
-    }
-    .challenge-value::before { content: '// value · '; color: var(--muted); font-size: 0.78em; }
-    .challenge-tag.badge { background: rgba(60,179,113,0.1) !important; border: 1px solid var(--teal-dim); color: var(--teal) !important; }
-    .challenge-attribution { font-family: var(--f-hand) !important; letter-spacing: 0.06em; }
-    .challenge-desc { display: block; padding: 1.2rem 0; color: var(--bone); font-family: var(--f-body); line-height: 1.7; }
-    .challenge-connection-info code {
-      background: var(--deep) !important; padding: 4px 10px; border: 1px solid var(--teal-dim);
-      color: var(--teal) !important; font-family: var(--f-mono);
-    }
-    .btn-file {
-      background: var(--card) !important; border: 1px solid var(--border) !important; color: var(--teal) !important;
-      font-family: var(--f-mono); letter-spacing: 0.04em;
-    }
-    .btn-file:hover { border-color: var(--teal-dim) !important; box-shadow: 0 0 12px rgba(60,179,113,0.18) !important; }
-    .nav-tabs .nav-link {
-      background: transparent !important; border: 1px solid transparent !important;
-      color: var(--muted) !important; font-family: var(--f-mono) !important; font-size: 0.74rem !important;
-      letter-spacing: 0.16em !important; text-transform: uppercase;
-    }
-    .nav-tabs .nav-link.active {
-      color: var(--teal) !important; background: var(--card) !important;
-      border-color: var(--border) var(--border) var(--card) !important;
-    }
-    .nav-tabs { border-bottom-color: var(--border) !important; }
-    details summary {
-      cursor: pointer; padding: 0.4rem 0.7rem; color: var(--teal);
-      font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.06em;
-      border: 1px dashed var(--teal-dim); border-radius: 2px; margin-bottom: 0.4rem;
-    }
-    details[open] summary { background: rgba(60,179,113,0.04); }
-    .challenge-input { font-family: var(--f-mono) !important; letter-spacing: 0.06em; }
-    .challenge-submit { font-family: var(--f-body) !important; letter-spacing: 0.18em; font-weight: 700 !important; }
-  </style>
-
   <div class="modal-content">
     <div class="modal-body py-4 px-4 px-sm-5">
 
@@ -96,10 +47,7 @@
       <div>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade show active" id="challenge">
-            <div class="text-center pt-3">
-              <span class="cs-chl-tag">// case file · {{ challenge.id }}</span>
-            </div>
-            <h2 class="challenge-name text-center">
+            <h2 class="challenge-name text-center pt-3">
               {{ challenge.name }}
             </h2>
             <h3 class="challenge-value text-center">
@@ -290,15 +238,15 @@
                         <div class="text-center">
                           <p class="mb-2">{% trans %}Rate this challenge:{% endtrans %}</p>
                           <div class="rating-buttons mb-2" x-init="selectedRating = ratingValue || 0;">
-                            <button 
-                              class="btn btn-outline-success me-2" 
+                            <button
+                              class="btn btn-outline-success me-2"
                               :class="{ 'active': selectedRating === 1 }"
                               @click="selectedRating = 1"
                             >
                               <i class="fa-solid fa-thumbs-up"></i>
                             </button>
-                            <button 
-                              class="btn btn-outline-danger" 
+                            <button
+                              class="btn btn-outline-danger"
                               :class="{ 'active': selectedRating === -1 }"
                               @click="selectedRating = -1"
                             >
@@ -306,16 +254,16 @@
                             </button>
                           </div>
                           <div class="mt-3">
-                            <textarea 
-                              class="form-control" 
-                              rows="2" 
+                            <textarea
+                              class="form-control"
+                              rows="2"
                               x-model="ratingReview"
                               placeholder="{% trans %}Write a review (optional){% endtrans %}"
                               maxlength="2000"
                             ></textarea>
                           </div>
                           <div class="mt-3">
-                            <button 
+                            <button
                               @click="submitRating()"
                               class="btn btn-primary"
                               :disabled="!selectedRating"
