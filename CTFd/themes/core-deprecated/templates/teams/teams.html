@@ -2,48 +2,145 @@
 
 {% block stylesheets %}
 <style>
+/* INFERNO THEME - TEAMS PAGE */
+
 .jumbotron {
-	background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-	border-bottom: 4px solid #f5f5f5;
-	border-top: 4px solid #f5f5f5;
+	background: linear-gradient(135deg, #1a0500 0%, #2d0a00 100%);
+	border-bottom: 3px solid #ff6600;
+	border-top: 3px solid #ff6600;
+	border-radius: 0;
 	padding: 3rem 1rem;
 	margin-bottom: 3rem;
-	box-shadow: 0 6px 0 rgba(0,0,0,0.8);
+	box-shadow: 0 4px 30px rgba(255, 80, 0, 0.4);
+	position: relative;
+	overflow: hidden;
 }
 
+.jumbotron::before {
+	content: "";
+	position: absolute;
+	top: 0; left: 0; width: 100%; height: 100%;
+	background: radial-gradient(ellipse at 50% 120%, rgba(255, 80, 0, 0.3) 0%, transparent 70%);
+	pointer-events: none;
+}
+
+.jumbotron .container { position: relative; z-index: 1; }
+
 .jumbotron h1 {
-	color: #f5f5f5;
+	color: #ff6600;
 	font-family: "Rajdhani", sans-serif;
-	font-weight: 900;
+	font-weight: 700;
 	font-size: 3rem;
 	text-transform: uppercase;
 	letter-spacing: 6px;
-	text-shadow: 3px 3px 0 #000;
+	text-shadow: 0 0 20px rgba(255, 100, 0, 0.9), 0 0 40px rgba(255, 60, 0, 0.5);
+	margin: 0;
 }
 
-.form-inline .form-control {
-	border: 2px solid #2a2a2a;
+.jumbotron .lead { color: #ffe8d0; }
+
+/* Search Form */
+.form-inline { margin-bottom: 2rem; }
+.form-inline .form-group { margin-bottom: 1rem; }
+
+.form-control, .custom-select {
+	background: rgba(26, 5, 0, 0.7) !important;
+	border: 2px solid rgba(255, 100, 0, 0.3) !important;
+	color: #ffe8d0 !important;
+	border-radius: 0;
 }
+
+.form-control:focus, .custom-select:focus {
+	border-color: #ff6600 !important;
+	box-shadow: 0 0 0 3px rgba(255, 100, 0, 0.15) !important;
+	outline: none;
+}
+
+.form-control::placeholder { color: rgba(255, 160, 80, 0.4); }
 
 .btn-primary {
-	background: #f5f5f5 !important;
-	color: #0a0a0a !important;
-	border: 2px solid #0a0a0a !important;
-	font-weight: 900;
+	background: linear-gradient(135deg, #ff2200, #ff6600) !important;
+	border: none !important;
+	border-radius: 0;
+	color: #000 !important;
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	box-shadow: 0 0 15px rgba(255, 80, 0, 0.4);
+	transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-	background: #fff !important;
-	transform: translate(-2px, -2px);
-	box-shadow: 4px 4px 0 rgba(0,0,0,0.8);
+	background: linear-gradient(135deg, #ff6600, #ffcc00) !important;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(255, 100, 0, 0.5);
+}
+
+hr { border-top: 1px solid rgba(255, 100, 0, 0.3); }
+
+/* Table */
+.table { color: #ffe8d0; background: linear-gradient(135deg, #1a0500, #2d0a00); }
+
+.table thead {
+	background: linear-gradient(135deg, #2d0a00, #1a0500);
+	border-bottom: 2px solid #ff6600;
+}
+
+.table thead td b {
+	color: #ff6600;
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	text-shadow: 0 0 10px rgba(255, 100, 0, 0.6);
+}
+
+.table tbody tr {
+	border-bottom: 1px solid rgba(255, 100, 0, 0.15);
+	transition: all 0.3s ease;
+}
+
+.table tbody tr:hover { background: rgba(255, 60, 0, 0.08); }
+.table tbody td { border: none; color: #ffe8d0; }
+
+.table a { color: #ff9500; text-decoration: none; transition: color 0.3s ease; }
+.table a:hover { color: #ffcc00; }
+
+/* Badge */
+.badge-primary {
+	background: linear-gradient(135deg, #ff2200, #ff6600);
+	color: #000;
+	border-radius: 0;
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+	padding: 0.3rem 0.75rem;
+}
+
+/* Pagination */
+.page-nav {
+	color: #ff6600;
+	text-decoration: none;
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+	font-size: 1.2rem;
+	margin: 0 0.5rem;
+	transition: all 0.3s ease;
+	display: inline-block;
+}
+
+.page-nav:hover {
+	color: #ffcc00;
+	text-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
+	transform: scale(1.2);
 }
 
 .page-select {
-	background: #1a1a1a;
-	color: #e0e0e0;
-	border: 2px solid #2a2a2a;
-	padding: 0.5rem;
-	font-weight: 700;
+	background: rgba(26, 5, 0, 0.7);
+	border: 2px solid rgba(255, 100, 0, 0.3);
+	color: #ff6600;
+	border-radius: 0;
+	padding: 0.3rem 0.75rem;
 }
 </style>
 {% endblock %}
@@ -51,7 +148,8 @@
 {% block content %}
 <div class="jumbotron">
 	<div class="container">
-		<h1>Teams</h1>
+		<h1>TEAMS</h1>
+		<p class="lead" style="color: #ffe8d0; margin-top: 1rem;">Competing teams</p>
 	</div>
 </div>
 <div class="container">
@@ -75,9 +173,7 @@
 					{{ form.q(class="form-control w-100", placeholder="Search for matching teams") }}
 				</div>
 				<div class="form-group col-md-2">
-					<button type="submit" class="btn btn-primary w-100">
-						<i class="fas fa-search" aria-hidden="true"></i>
-					</button>
+					<button type="submit" class="btn btn-primary w-100">SEARCH</button>
 				</div>
 			</form>
 			{% endwith %}
@@ -91,10 +187,10 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<td><b>Team</b></td>
-						<td><b>Website</b></td>
-						<td class="d-none d-md-table-cell d-lg-table-cell"><b>Affiliation</b></td>
-						<td class="d-none d-md-table-cell d-lg-table-cell"><b>Country</b></td>
+						<td><b>TEAM</b></td>
+						<td><b>WEBSITE</b></td>
+						<td class="d-none d-md-table-cell d-lg-table-cell"><b>AFFILIATION</b></td>
+						<td class="d-none d-md-table-cell d-lg-table-cell"><b>COUNTRY</b></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -108,14 +204,15 @@
 						{% endif %}
 						{% if team.oauth_id %}
 							<a href="https://majorleaguecyber.org/t/{{ team.name }}">
-								<span class="badge badge-primary">Official</span>
+								<span class="badge badge-primary">OFFICIAL</span>
 							</a>
 						{% endif %}
 						</td>
 						<td class="text-center" style="width: 10px;">
 							{% if team.website and (team.website.startswith('http://') or team.website.startswith('https://')) %}
 								<a href="{{ team.website }}" target="_blank" rel="noopener">
-									<i class="fas fa-external-link-alt" data-toggle="tooltip" data-placement="top" title="{{ team.website }}"></i>
+									<i class="fas fa-external-link-alt" data-toggle="tooltip" data-placement="top"
+									   title="{{ team.website }}" style="color: #ff6600;"></i>
 								</a>
 							{% endif %}
 						</td>
@@ -123,12 +220,10 @@
 							{% if team.affiliation %}
 								{% if team.affiliation | length > 50 %}
 								<span data-toggle="tooltip" data-placement="top" title="{{ team.affiliation }}">
-									{% if team.affiliation %}{{ team.affiliation | truncate(50) }}{% endif %}
+									{{ team.affiliation | truncate(50) }}
 								</span>
 								{% else %}
-								<span>
-									{% if team.affiliation %}{{ team.affiliation | truncate(50) }}{% endif %}
-								</span>
+								<span>{{ team.affiliation | truncate(50) }}</span>
 								{% endif %}
 							{% endif %}
 						</td>
@@ -146,13 +241,15 @@
 			</table>
 		</div>
 	</div>
+
 	{% if teams.pages > 1 %}
 	<div class="row">
 		<div class="col-md-12">
-			<div class="text-center">Page
-				<br>
+			<div class="pagination-container text-center">
+				<strong style="color: #ff6600;">PAGE</strong>
+				<br><br>
 				{% if teams.page != 1 %}
-				<a href="{{ prev_page }}">&lt;&lt;&lt;</a>
+				<a href="{{ prev_page }}" class="page-nav">&lt;&lt;&lt;</a>
 				{% endif %}
 				<select class="page-select">
 					{% for page in range(1, teams.pages + 1) %}
@@ -160,14 +257,33 @@
 					{% endfor %}
 				</select>
 				{% if teams.next_num %}
-				<a href="{{ next_page }}">&gt;&gt;&gt;</a>
+				<a href="{{ next_page }}" class="page-nav">&gt;&gt;&gt;</a>
 				{% endif %}
 			</div>
 		</div>
 	</div>
 	{% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	$('[data-toggle="tooltip"]').tooltip();
+
+	const pageSelect = document.querySelector('.page-select');
+	if (pageSelect) {
+		pageSelect.addEventListener('change', function() {
+			const currentUrl = new URL(window.location.href);
+			currentUrl.searchParams.set('page', this.value);
+			window.location.href = currentUrl.toString();
+		});
+	}
+
+	document.querySelectorAll('.table tbody tr').forEach(function(row) {
+		row.addEventListener('mouseenter', function() { this.style.transform = 'translateX(8px)'; });
+		row.addEventListener('mouseleave', function() { this.style.transform = 'translateX(0)'; });
+	});
+});
+</script>
 {% endblock %}
 
-{% block scripts %}
-{% endblock %}
+{% block scripts %}{% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="jumbotron">
 	<div class="container">
-		<h1>REGISTER</h1>
+		<h1>LOGIN</h1>
 	</div>
 </div>
 
@@ -14,20 +14,14 @@
 				<canvas class="fire-bg"></canvas>
 				<div class="box-content">
 					<div class="header-section">
-						<h2>CREATE ACCOUNT</h2>
-						<p>Join the competition platform</p>
+						<h2>WELCOME BACK</h2>
+						<p>Sign in to your account</p>
 					</div>
 
-					{% with form = Forms.auth.RegistrationForm() %}
-					<form method="post" accept-charset="utf-8">
+					<form method="POST">
 						<div class="form-field">
 							<label>USERNAME</label>
 							<input type="text" name="name" placeholder="Enter username" required autofocus>
-						</div>
-
-						<div class="form-field">
-							<label>EMAIL</label>
-							<input type="email" name="email" placeholder="your@email.com" required>
 						</div>
 
 						<div class="form-field">
@@ -41,19 +35,17 @@
 									</svg>
 								</button>
 							</div>
-							<div class="strength-wrap">
-								<div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
-								<span class="strength-label" id="strengthLabel"></span>
-							</div>
 						</div>
 
-						{{ form.nonce() }}
-						<button type="submit" class="submit-btn">CREATE ACCOUNT</button>
+						<div class="form-options">
+							<a href="{{ url_for('auth.reset_password') }}">Forgot password?</a>
+						</div>
+
+						<button type="submit" class="submit-btn">LOGIN</button>
 					</form>
-					{% endwith %}
 
 					<div class="box-footer">
-						<p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+						<p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
 					</div>
 				</div>
 			</div>
@@ -102,7 +94,11 @@
 	margin-bottom: 0.5rem;
 }
 
-.header-section p { color: rgba(255, 200, 130, 0.7); font-size: 0.95rem; margin: 0; }
+.header-section p {
+	color: rgba(255, 200, 130, 0.7);
+	font-size: 0.95rem;
+	margin: 0;
+}
 
 .form-field { margin-bottom: 2rem; }
 
@@ -150,17 +146,16 @@
 
 .eye-btn:hover { color: #ff6600; }
 
-/* Strength Bar */
-.strength-wrap { margin-top: 0.75rem; }
-.strength-bar { width: 100%; height: 4px; background: rgba(255, 100, 0, 0.2); margin-bottom: 0.4rem; }
-.strength-fill { height: 100%; width: 0; transition: all 0.3s ease; }
-.strength-label {
-	color: rgba(255, 160, 80, 0.6);
-	font-family: "Rajdhani", sans-serif;
-	font-size: 0.8rem;
-	font-weight: 600;
-	letter-spacing: 1px;
+.form-options { text-align: right; margin-bottom: 1.5rem; }
+
+.form-options a {
+	color: rgba(255, 120, 0, 0.8);
+	font-size: 0.9rem;
+	text-decoration: none;
+	transition: color 0.3s ease;
 }
+
+.form-options a:hover { color: #ff9500; text-decoration: underline; }
 
 .submit-btn {
 	width: 100%;
@@ -175,7 +170,6 @@
 	cursor: pointer;
 	transition: all 0.3s ease;
 	box-shadow: 0 0 20px rgba(255, 60, 0, 0.5);
-	margin-top: 1rem;
 	position: relative;
 	overflow: hidden;
 }
@@ -244,13 +238,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         for (let i = 0; i < 3 && particles.length < MAX; i++) spawnParticle();
+
         for (let i = particles.length - 1; i >= 0; i--) {
             const p = particles[i];
             p.x += p.vx + Math.sin(Date.now() * 0.002 + i) * 0.25;
             p.y += p.vy;
             p.life -= p.decay;
+
             if (p.life <= 0) { particles.splice(i, 1); continue; }
+
             const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2.5);
             grad.addColorStop(0, getColor(p.life));
             grad.addColorStop(1, 'rgba(0,0,0,0)');
@@ -259,39 +257,11 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.arc(p.x, p.y, p.size * 2.5, 0, Math.PI * 2);
             ctx.fill();
         }
+
         requestAnimationFrame(animate);
     }
 
     animate();
-
-    /* Password Strength */
-    const passwordInput = document.getElementById('password');
-    const fill  = document.getElementById('strengthFill');
-    const label = document.getElementById('strengthLabel');
-
-    passwordInput.addEventListener('input', function() {
-        const pw = this.value;
-        let score = 0;
-        if (pw.length >= 6)  score += 25;
-        if (pw.length >= 10) score += 25;
-        if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score += 25;
-        if (/[0-9]/.test(pw) && /[^a-zA-Z0-9]/.test(pw)) score += 25;
-
-        fill.style.width = score + '%';
-
-        const levels = [
-            { min: 0,  color: 'transparent', text: '' },
-            { min: 1,  color: '#ff2200',     text: 'WEAK' },
-            { min: 50, color: '#ff8800',     text: 'FAIR' },
-            { min: 75, color: '#ff9500',     text: 'GOOD' },
-            { min: 100,color: '#ffcc00',     text: 'STRONG' }
-        ];
-
-        const lvl = levels.filter(l => score >= l.min).pop();
-        fill.style.background = lvl.color;
-        label.textContent = lvl.text;
-        label.style.color = lvl.color;
-    });
 });
 
 function togglePassword() {
@@ -307,3 +277,4 @@ function togglePassword() {
 }
 </script>
 {% endblock %}
+{% block scripts %}{% endblock %}

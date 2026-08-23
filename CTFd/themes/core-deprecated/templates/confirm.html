@@ -34,19 +34,24 @@
 				<hr>
 
 				{% with form = Forms.auth.ConfirmForm() %}
-				<form method="POST" action="{{ url_for('auth.confirm') }}">
-					<div class="row">
-						<div class="col-md-6">
-							{{ form.submit(class="btn btn-md btn-primary btn-outlined w-100") }}
+				<div class="inferno-box">
+				  <canvas class="fire-bg"></canvas>
+				  <div class="box-content">
+					<form method="POST" action="{{ url_for('auth.confirm') }}">
+						<div class="row">
+							<div class="col-md-6">
+								{{ form.submit(class="btn btn-md btn-primary btn-outlined w-100") }}
+							</div>
+							<div class="col-md-6">
+								<a href="{{ url_for('views.settings') }}" class="btn btn-md btn-secondary btn-outlined w-100">
+									Change Email Address
+								</a>
+							</div>
+							{{ form.nonce() }}
 						</div>
-						<div class="col-md-6">
-							<a href="{{ url_for('views.settings') }}" class="btn btn-md btn-secondary btn-outlined w-100">
-								Change Email Address
-							</a>
-						</div>
-						{{ form.nonce() }}
-					</div>
-				</form>
+					</form>
+				  </div>
+				</div>
 				{% endwith %}
 			</div>
 		</div>

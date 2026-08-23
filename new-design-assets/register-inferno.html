@@ -18,8 +18,7 @@
 						<p>Join the competition platform</p>
 					</div>
 
-					{% with form = Forms.auth.RegistrationForm() %}
-					<form method="post" accept-charset="utf-8">
+					<form method="POST">
 						<div class="form-field">
 							<label>USERNAME</label>
 							<input type="text" name="name" placeholder="Enter username" required autofocus>
@@ -47,10 +46,8 @@
 							</div>
 						</div>
 
-						{{ form.nonce() }}
 						<button type="submit" class="submit-btn">CREATE ACCOUNT</button>
 					</form>
-					{% endwith %}
 
 					<div class="box-footer">
 						<p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
@@ -307,3 +304,4 @@ function togglePassword() {
 }
 </script>
 {% endblock %}
+{% block scripts %}{% endblock %}

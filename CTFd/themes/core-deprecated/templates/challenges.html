@@ -3,460 +3,356 @@
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{ url_for('views.themes', path='css/challenge-board.css') }}">
 	<link rel="stylesheet" href="{{ url_for('views.themes', path='css/challenge-theme.css') }}">
-	
-	<!-- Manga Challenges Page Styles -->
+
 	<style>
-		/* Manga Panel - Challenges Page */
-		
-		/* Hero Jumbotron */
-		.jumbotron {
-			background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-			border-bottom: 4px solid #f5f5f5;
-			border-top: 4px solid #f5f5f5;
-			border-radius: 0;
-			padding: 3rem 1rem;
-			margin-bottom: 3rem;
-			box-shadow: 
-				0 6px 0 rgba(0,0,0,0.8),
-				inset 0 0 0 1px rgba(255,255,255,0.1);
-			position: relative;
-		}
-		
-		.jumbotron::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background: repeating-linear-gradient(
-				-45deg,
-				transparent,
-				transparent 20px,
-				rgba(255,255,255,0.01) 20px,
-				rgba(255,255,255,0.01) 40px
-			);
-			pointer-events: none;
-		}
-		
-		.jumbotron .container {
-			position: relative;
-			z-index: 1;
-		}
-		
-		.jumbotron h1 {
-			color: #f5f5f5;
-			font-family: "Rajdhani", sans-serif;
-			font-weight: 900;
-			font-size: 4rem;
-			text-transform: uppercase;
-			letter-spacing: 8px;
-			margin: 0;
-			text-shadow: 
-				3px 3px 0 #000,
-				-1px -1px 0 #000,
-				1px -1px 0 #000,
-				-1px 1px 0 #000,
-				6px 6px 0 rgba(0,0,0,0.3);
-			position: relative;
-		}
-		
-		.jumbotron h1::before {
-			content: "";
-			position: absolute;
-			top: -10px;
-			left: -20px;
-			right: -20px;
-			bottom: -10px;
-			background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
-			transform: skewX(-5deg);
-			z-index: -1;
-		}
-		
-		.jumbotron .lead {
-			color: #b0b0b0;
-			font-weight: 600;
-			letter-spacing: 2px;
-			text-shadow: 1px 1px 0 #000;
-		}
-		
-		/* Loading Spinner */
-		.spinner {
-			color: #f5f5f5 !important;
-			filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
-		}
-		
-		.min-vh-50 {
-			min-height: 50vh;
-			background: rgba(26, 26, 26, 0.3);
-			border: 2px dashed #2a2a2a;
-			border-radius: 0;
-			margin: 2rem 0;
-		}
-		
-		/* Challenges Board Container */
-		#challenges-board {
-			animation: fadeIn 0.8s ease;
-		}
-		
-		@keyframes fadeIn {
-			from { opacity: 0; }
-			to { opacity: 1; }
-		}
-		
-		/* Challenge Categories - Manga Panels */
-		.challenge-category {
-			background: #1a1a1a;
-			border: 3px solid #2a2a2a;
-			border-radius: 0;
-			padding: 0;
-			margin-bottom: 2.5rem;
-			box-shadow: 
-				6px 6px 0 rgba(0,0,0,0.5),
-				inset 0 0 0 1px rgba(255,255,255,0.05);
-			transition: all 0.3s ease;
-			position: relative;
-		}
-		
-		.challenge-category::before {
-			content: "";
-			position: absolute;
-			top: -5px;
-			left: -5px;
-			right: -5px;
-			bottom: -5px;
-			border: 1px solid rgba(255,255,255,0.1);
-			pointer-events: none;
-		}
-		
-		.challenge-category:hover {
-			border-color: #3a3a3a;
-			box-shadow: 
-				8px 8px 0 rgba(0,0,0,0.5),
-				inset 0 0 0 1px rgba(255,255,255,0.1);
-			transform: translate(-2px, -2px);
-		}
-		
-		.challenge-category-header {
-			background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-			color: #f5f5f5;
-			padding: 1.2rem 1.5rem;
-			margin: 0;
-			border-bottom: 3px solid #f5f5f5;
-			font-family: "Rajdhani", sans-serif;
-			font-weight: 900;
-			font-size: 1.8rem;
-			text-transform: uppercase;
-			letter-spacing: 4px;
-			text-shadow: 
-				2px 2px 0 #000,
-				-1px -1px 0 #000,
-				1px -1px 0 #000,
-				-1px 1px 0 #000;
-			position: relative;
-		}
-		
-		.challenge-category-header::after {
-			content: "";
-			position: absolute;
-			bottom: -3px;
-			left: 0;
-			width: 100%;
-			height: 3px;
-			background: repeating-linear-gradient(
-				90deg,
-				#f5f5f5 0px,
-				#f5f5f5 8px,
-				transparent 8px,
-				transparent 12px
-			);
-		}
-		
-		/* Challenge Cards - Individual Panels */
-		.challenge-card {
-			background: #0a0a0a;
-			border: 2px solid #2a2a2a;
-			border-radius: 0;
-			padding: 1.5rem;
-			margin: 1.5rem;
-			cursor: pointer;
-			transition: all 0.2s ease;
-			position: relative;
-			box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
-		}
-		
-		.challenge-card::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 4px;
-			height: 100%;
-			background: #f5f5f5;
-			transform: scaleY(0);
-			transition: transform 0.3s ease;
-		}
-		
-		.challenge-card::after {
-			content: "";
-			position: absolute;
-			top: 2px;
-			left: 2px;
-			right: 2px;
-			bottom: 2px;
-			border: 1px solid rgba(255,255,255,0.05);
-			pointer-events: none;
-		}
-		
-		.challenge-card:hover {
-			border-color: #f5f5f5;
-			transform: translate(-3px, -3px);
-			box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
-		}
-		
-		.challenge-card:hover::before {
-			transform: scaleY(1);
-		}
-		
-		.challenge-card-title {
-			color: #f5f5f5;
-			font-weight: 900;
-			font-size: 1.3rem;
-			margin-bottom: 0.5rem;
-			letter-spacing: 1px;
-			text-shadow: 1px 1px 0 #000;
-			transition: color 0.3s ease;
-		}
-		
-		.challenge-card:hover .challenge-card-title {
-			color: #fff;
-		}
-		
-		.challenge-card-value {
-			background: #f5f5f5;
-			color: #0a0a0a;
-			padding: 0.4rem 1rem;
-			border-radius: 0;
-			border: 2px solid #0a0a0a;
-			font-weight: 900;
-			display: inline-block;
-			font-size: 1rem;
-			letter-spacing: 1px;
-			box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
-		}
-		
-		.challenge-card-solves {
-			color: #7f8c8d;
-			font-size: 0.9rem;
-			margin-top: 0.8rem;
-			font-weight: 600;
-		}
-		
-		/* Solved Challenge */
-		.challenge-card.solved {
-			background: rgba(255, 255, 255, 0.05);
-			border-color: #4a4a4a;
-		}
-		
-		.challenge-card.solved::before {
-			background: #b0b0b0;
-			transform: scaleY(1);
-		}
-		
-		.challenge-card.solved .challenge-card-title {
-			color: #b0b0b0;
-			text-decoration: line-through;
-		}
-		
-		.challenge-card.solved::after {
-			content: "SOLVED";
-			position: absolute;
-			top: 50%;
-			right: 1rem;
-			transform: translateY(-50%) rotate(-15deg);
-			color: rgba(255,255,255,0.15);
-			font-size: 3rem;
-			font-weight: 900;
-			letter-spacing: 3px;
-			text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
-			pointer-events: none;
-		}
-		
-		/* Locked Challenge */
-		.challenge-card.locked {
-			opacity: 0.4;
-			cursor: not-allowed;
-			background: repeating-linear-gradient(
-				45deg,
-				#0a0a0a,
-				#0a0a0a 10px,
-				#1a1a1a 10px,
-				#1a1a1a 20px
-			);
-		}
-		
-		.challenge-card.locked::after {
-			content: "LOCKED";
-			position: absolute;
-			top: 50%;
-			right: 1rem;
-			transform: translateY(-50%);
-			color: rgba(255,255,255,0.1);
-			font-size: 2rem;
-			font-weight: 900;
-			letter-spacing: 2px;
-		}
-		
-		/* Tags */
-		.challenge-card-tags {
-			margin-top: 1rem;
-		}
-		
-		.challenge-tag {
-			background: transparent;
-			border: 2px solid #4a4a4a;
-			color: #b0b0b0;
-			padding: 0.3rem 0.8rem;
-			border-radius: 0;
-			font-size: 0.75rem;
-			margin-right: 0.5rem;
-			display: inline-block;
-			font-weight: 700;
-			letter-spacing: 1px;
-			text-transform: uppercase;
-		}
-		
-		/* Empty State */
-		.challenges-empty {
-			text-align: center;
-			padding: 4rem 2rem;
-			background: #1a1a1a;
-			border: 3px dashed #2a2a2a;
-			border-radius: 0;
-			margin: 2rem 0;
-		}
-		
-		.challenges-empty h3 {
-			color: #e0e0e0;
-			margin-bottom: 0.5rem;
-			font-weight: 900;
-			letter-spacing: 2px;
-		}
-		
-		.challenges-empty p {
-			color: #7f8c8d;
-		}
-		
-		/* Filter/Search Bar */
-		.challenge-filters {
-			background: #1a1a1a;
-			border: 3px solid #2a2a2a;
-			border-radius: 0;
-			padding: 1.5rem;
-			margin-bottom: 2rem;
-			box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
-		}
-		
-		.challenge-search {
-			background: #0a0a0a;
-			border: 2px solid #2a2a2a;
-			color: #e0e0e0;
-			padding: 0.75rem 1rem;
-			border-radius: 0;
-			width: 100%;
-			transition: all 0.3s ease;
-		}
-		
-		.challenge-search:focus {
-			border-color: #f5f5f5;
-			box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
-			outline: none;
-		}
-		
-		.challenge-search::placeholder {
-			color: #4a4a4a;
-		}
-		
-		/* Progress Indicator */
-		.category-progress {
-			margin: 1rem 1.5rem;
-			background: #0a0a0a;
-			height: 10px;
-			border: 2px solid #2a2a2a;
-			border-radius: 0;
-			overflow: hidden;
-		}
-		
-		.category-progress-bar {
-			height: 100%;
-			background: repeating-linear-gradient(
-				90deg,
-				#f5f5f5 0px,
-				#f5f5f5 4px,
-				#e0e0e0 4px,
-				#e0e0e0 8px
-			);
-			transition: width 0.6s ease;
-			box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-		}
-		
-		.category-stats {
-			color: #7f8c8d;
-			font-size: 0.9rem;
-			margin: 0.5rem 1.5rem 1rem;
-			font-weight: 600;
-		}
-		
-		.category-stats span {
-			color: #f5f5f5;
-			font-weight: 900;
-		}
-		
-		/* Responsive Design */
-		@media (max-width: 768px) {
-			.jumbotron h1 {
-				font-size: 2.5rem;
-				letter-spacing: 4px;
-			}
-			
-			.challenge-card {
-				padding: 1rem;
-				margin: 1rem;
-			}
-			
-			.challenge-category-header {
-				font-size: 1.3rem;
-			}
-		}
-		
-		/* Animation */
-		.challenge-card {
-			animation: slideInUp 0.4s ease;
-		}
-		
-		@keyframes slideInUp {
-			from {
-				opacity: 0;
-				transform: translateY(20px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
+	/* INFERNO THEME - CHALLENGES PAGE */
+
+	/* Loading State */
+	.spinner {
+		color: #ff6600 !important;
+		filter: drop-shadow(0 0 15px rgba(255, 100, 0, 0.8));
+	}
+
+	.min-vh-50 p {
+		color: #ff6600;
+		font-family: "Rajdhani", sans-serif;
+		font-size: 1.1rem;
+		font-weight: 700;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+	}
+
+	/* Challenges Board */
+	#challenges-board {
+		position: relative;
+		padding: 2rem 0;
+	}
+
+	/* Category Headers */
+	.challenge-category {
+		margin-bottom: 3rem;
+	}
+
+	.category-header {
+		background: linear-gradient(135deg, #1a0500 0%, #2d0a00 100%);
+		border-left: 4px solid #ff6600;
+		padding: 1rem 1.5rem;
+		margin-bottom: 1.5rem;
+		position: relative;
+	}
+
+	.category-header::before {
+		content: "";
+		position: absolute;
+		top: 0; left: 0;
+		width: 4px; height: 100%;
+		background: linear-gradient(180deg, #ff2200, #ffcc00);
+		box-shadow: 0 0 10px rgba(255, 100, 0, 0.8);
+	}
+
+	.category-name {
+		color: #ff6600;
+		font-family: "Rajdhani", sans-serif;
+		font-size: 1.5rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		margin: 0;
+		text-shadow: 0 0 10px rgba(255, 100, 0, 0.6);
+	}
+
+	/* Challenge Cards */
+	.challenge-card {
+		background: linear-gradient(135deg, #1a0500 0%, #2d0a00 100%);
+		border: 2px solid rgba(255, 100, 0, 0.3);
+		border-radius: 0;
+		padding: 1.5rem;
+		margin-bottom: 1rem;
+		transition: all 0.3s ease;
+		position: relative;
+		cursor: pointer;
+		overflow: hidden;
+	}
+
+	.challenge-card::before {
+		content: "";
+		position: absolute;
+		top: 0; left: 0;
+		width: 3px; height: 0;
+		background: linear-gradient(180deg, #ff2200, #ffcc00);
+		transition: height 0.3s ease;
+	}
+
+	/* Ember glow sweep on hover */
+	.challenge-card::after {
+		content: "";
+		position: absolute;
+		bottom: 0; left: 0;
+		width: 100%; height: 2px;
+		background: linear-gradient(90deg, transparent, #ff6600, transparent);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.challenge-card:hover {
+		border-color: #ff6600;
+		box-shadow: 0 0 25px rgba(255, 80, 0, 0.3);
+		transform: translateX(5px);
+	}
+
+	.challenge-card:hover::before { height: 100%; }
+	.challenge-card:hover::after  { opacity: 1; }
+
+	/* Solved State */
+	.challenge-card.solved {
+		border-color: #ffcc00;
+		background: linear-gradient(135deg, rgba(255, 180, 0, 0.05) 0%, #2d0a00 100%);
+	}
+
+	.challenge-card.solved::before {
+		background: #ffcc00;
+		height: 100%;
+	}
+
+	.challenge-card.solved:hover {
+		border-color: #ffcc00;
+		box-shadow: 0 0 25px rgba(255, 200, 0, 0.3);
+	}
+
+	/* Locked State */
+	.challenge-card.locked {
+		border-color: rgba(100, 30, 0, 0.5);
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.challenge-card.locked::before { background: #3d1200; }
+	.challenge-card.locked:hover { transform: none; box-shadow: none; }
+
+	/* Challenge Name */
+	.challenge-name {
+		color: #ff9500;
+		font-family: "Rajdhani", sans-serif;
+		font-size: 1.2rem;
+		font-weight: 700;
+		margin: 0;
+		transition: all 0.3s ease;
+	}
+
+	.challenge-card:hover .challenge-name {
+		color: #ffcc00;
+		text-shadow: 0 0 10px rgba(255, 200, 0, 0.6);
+	}
+
+	.challenge-card.solved .challenge-name { color: #ffcc00; }
+
+	/* Challenge Value Badge */
+	.challenge-value {
+		background: rgba(255, 100, 0, 0.15);
+		border: 1px solid #ff6600;
+		color: #ff6600;
+		font-family: "Rajdhani", sans-serif;
+		font-size: 1rem;
+		font-weight: 700;
+		padding: 0.25rem 0.75rem;
+		white-space: nowrap;
+		border-radius: 0;
+	}
+
+	.challenge-card.solved .challenge-value {
+		background: rgba(255, 200, 0, 0.15);
+		border-color: #ffcc00;
+		color: #ffcc00;
+	}
+
+	/* Challenge Description */
+	.challenge-description {
+		color: rgba(255, 220, 170, 0.8);
+		font-size: 0.95rem;
+		line-height: 1.6;
+		margin-bottom: 1rem;
+	}
+
+	/* Challenge Header Row */
+	.challenge-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 1rem;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	/* Tags */
+	.challenge-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.challenge-tag {
+		background: rgba(255, 60, 0, 0.1);
+		border: 1px solid rgba(255, 100, 0, 0.4);
+		color: #ff9500;
+		font-family: "Rajdhani", sans-serif;
+		font-size: 0.75rem;
+		font-weight: 600;
+		padding: 0.2rem 0.6rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		border-radius: 0;
+	}
+
+	/* Challenge Footer */
+	.challenge-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid rgba(255, 100, 0, 0.2);
+	}
+
+	.challenge-solves {
+		color: rgba(255, 180, 100, 0.6);
+		font-size: 0.9rem;
+	}
+
+	.challenge-solves i { color: #ff6600; margin-right: 0.5rem; }
+
+	/* Status Badges */
+	.status-badge {
+		font-family: "Rajdhani", sans-serif;
+		font-size: 0.8rem;
+		font-weight: 700;
+		padding: 0.3rem 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		border-radius: 0;
+	}
+
+	.status-badge.solved {
+		background: rgba(255, 200, 0, 0.15);
+		border: 1px solid #ffcc00;
+		color: #ffcc00;
+	}
+
+	.status-badge.locked {
+		background: rgba(100, 30, 0, 0.3);
+		border: 1px solid rgba(255, 60, 0, 0.3);
+		color: rgba(255, 100, 0, 0.5);
+	}
+
+	/* Empty State */
+	.empty-state {
+		text-align: center;
+		padding: 4rem 2rem;
+		background: linear-gradient(135deg, #1a0500, #2d0a00);
+		border: 2px dashed rgba(255, 100, 0, 0.3);
+		border-radius: 0;
+	}
+
+	.empty-state i { color: rgba(255, 100, 0, 0.4); font-size: 4rem; margin-bottom: 1.5rem; }
+	.empty-state h3 { color: #ff6600; font-family: "Rajdhani", sans-serif; }
+	.empty-state p  { color: rgba(255, 200, 130, 0.6); }
+
+	/* Animations */
+	@keyframes fadeInUp {
+		from { opacity: 0; transform: translateY(20px); }
+		to   { opacity: 1; transform: translateY(0); }
+	}
+
+	.fade-in { animation: fadeInUp 0.5s ease; }
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.challenge-header { flex-direction: column; }
+		.challenge-footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+	}
+
+	/* core-deprecated challenge board uses .challenge-button and .solved-challenge */
+	#challenges-board .challenge-button {
+		background: linear-gradient(135deg, #1a0500 0%, #2d0a00 100%);
+		border: 2px solid rgba(255, 100, 0, 0.3);
+		border-radius: 0;
+		box-shadow: none;
+		position: relative;
+		overflow: hidden;
+		transition: all 0.3s ease;
+	}
+
+	#challenges-board .challenge-button::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 3px;
+		height: 0;
+		background: linear-gradient(180deg, #ff2200, #ffcc00);
+		transition: height 0.3s ease;
+	}
+
+	#challenges-board .challenge-button::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 2px;
+		background: linear-gradient(90deg, transparent, #ff6600, transparent);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	#challenges-board .challenge-button:hover {
+		border-color: #ff6600;
+		box-shadow: 0 0 25px rgba(255, 80, 0, 0.3);
+		transform: translateX(5px);
+	}
+
+	#challenges-board .challenge-button:hover::before { height: 100%; }
+	#challenges-board .challenge-button:hover::after { opacity: 1; }
+
+	#challenges-board .challenge-button p {
+		color: #ff9500;
+		font-family: "Rajdhani", sans-serif;
+		font-size: 1.2rem;
+		font-weight: 700;
+		margin: 0;
+	}
+
+	#challenges-board .challenge-button span {
+		background: rgba(255, 100, 0, 0.15);
+		border: 1px solid #ff6600;
+		color: #ff6600;
+		font-family: "Rajdhani", sans-serif;
+		font-size: 1rem;
+		font-weight: 700;
+		padding: 0.25rem 0.75rem;
+		border-radius: 0;
+		display: inline-block;
+	}
+
+	#challenges-board .challenge-button.solved-challenge {
+		border-color: #ffcc00;
+		background: linear-gradient(135deg, rgba(255, 180, 0, 0.05) 0%, #2d0a00 100%);
+	}
+
+	#challenges-board .challenge-button.solved-challenge::before {
+		background: #ffcc00;
+		height: 100%;
+	}
+
+	#challenges-board .challenge-button.solved-challenge p,
+	#challenges-board .challenge-button.solved-challenge span {
+		color: #ffcc00;
+		border-color: #ffcc00;
+	}
 	</style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section - Manga Panel -->
-<div class="jumbotron">
-	<div class="container">
-		<h1>CHALLENGES</h1>
-		<p class="lead mt-3">
-			Test your skills and prove your worth
-		</p>
-	</div>
-</div>
 
 <!-- Challenge Modal -->
 <div class="modal fade" id="challenge-window" tabindex="-1" role="dialog">
@@ -464,22 +360,17 @@
 
 <!-- Main Container -->
 <div class="container">
-	<!-- Error Messages -->
 	<div class="row">
 		<div class="col-md-12">
 			{% include "components/errors.html" %}
 		</div>
 	</div>
 
-	<!-- Challenges Board -->
 	<div id='challenges-board'>
-		<!-- Loading State -->
 		<div class="min-vh-50 d-flex align-items-center">
 			<div class="text-center w-100">
 				<i class="fas fa-circle-notch fa-spin fa-3x fa-fw spinner"></i>
-				<p class="mt-3" style="color: #7f8c8d; font-size: 1.1rem; font-weight: 600;">
-					Loading challenges...
-				</p>
+				<p class="mt-3">Loading challenges...</p>
 			</div>
 		</div>
 	</div>
@@ -489,7 +380,6 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-	// Add animation to challenge cards when they load
 	const observer = new MutationObserver(function(mutations) {
 		mutations.forEach(function(mutation) {
 			if (mutation.addedNodes.length) {
@@ -505,19 +395,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		});
 	});
-	
-	const challengesBoard = document.getElementById('challenges-board');
-	if (challengesBoard) {
-		observer.observe(challengesBoard, { childList: true, subtree: true });
-	}
-	
-	// Keyboard navigation
+
+	const board = document.getElementById('challenges-board');
+	if (board) observer.observe(board, { childList: true, subtree: true });
+
 	document.addEventListener('keydown', function(e) {
 		if (e.key === 'Escape') {
 			const modal = document.getElementById('challenge-window');
-			if (modal && modal.classList.contains('show')) {
-				$(modal).modal('hide');
-			}
+			if (modal && modal.classList.contains('show')) $(modal).modal('hide');
 		}
 	});
 });

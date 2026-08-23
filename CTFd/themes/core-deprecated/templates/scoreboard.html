@@ -1,463 +1,277 @@
 {% extends "base.html" %}
 
 {% block stylesheets %}
-	<!-- Manga Scoreboard Page Styles -->
-	<style>
-		/* Manga Panel - Scoreboard Page */
-		
-		/* Hero Jumbotron */
-		.jumbotron {
-			background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-			border-bottom: 4px solid #f5f5f5;
-			border-top: 4px solid #f5f5f5;
-			border-radius: 0;
-			padding: 3rem 1rem;
-			margin-bottom: 3rem;
-			box-shadow: 
-				0 6px 0 rgba(0,0,0,0.8),
-				inset 0 0 0 1px rgba(255,255,255,0.1);
-			position: relative;
-		}
-		
-		.jumbotron::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background: repeating-linear-gradient(
-				-45deg,
-				transparent,
-				transparent 20px,
-				rgba(255,255,255,0.01) 20px,
-				rgba(255,255,255,0.01) 40px
-			);
-			pointer-events: none;
-		}
-		
-		.jumbotron .container {
-			position: relative;
-			z-index: 1;
-		}
-		
-		.jumbotron h1 {
-			color: #f5f5f5;
-			font-family: "Rajdhani", sans-serif;
-			font-weight: 900;
-			font-size: 4rem;
-			text-transform: uppercase;
-			letter-spacing: 8px;
-			margin: 0;
-			text-shadow: 
-				3px 3px 0 #000,
-				-1px -1px 0 #000,
-				1px -1px 0 #000,
-				-1px 1px 0 #000,
-				6px 6px 0 rgba(0,0,0,0.3);
-		}
-		
-		.jumbotron .lead {
-			color: #b0b0b0;
-			font-weight: 600;
-			letter-spacing: 2px;
-			text-shadow: 1px 1px 0 #000;
-		}
-		
-		/* Loading Spinner */
-		.spinner {
-			color: #f5f5f5 !important;
-			filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
-		}
-		
-		/* Score Graph Container */
-		#score-graph {
-			background: #1a1a1a;
-			border: 3px solid #2a2a2a;
-			border-radius: 0;
-			padding: 2rem;
-			margin-bottom: 3rem;
-			min-height: 400px;
-			box-shadow: 
-				6px 6px 0 rgba(0,0,0,0.5),
-				inset 0 0 0 1px rgba(255,255,255,0.05);
-			transition: all 0.3s ease;
-		}
-		
-		#score-graph:hover {
-			border-color: #3a3a3a;
-			box-shadow: 
-				8px 8px 0 rgba(0,0,0,0.5),
-				inset 0 0 0 1px rgba(255,255,255,0.1);
-		}
-		
-		/* Scoreboard Container */
-		#scoreboard {
-			animation: fadeInUp 0.8s ease;
-		}
-		
-		@keyframes fadeInUp {
-			from {
-				opacity: 0;
-				transform: translateY(30px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-		
-		/* Scoreboard Table - Manga Panel */
-		.table {
-			background: #1a1a1a;
-			border: 3px solid #2a2a2a;
-			border-radius: 0;
-			overflow: hidden;
-			box-shadow: 
-				6px 6px 0 rgba(0,0,0,0.5),
-				inset 0 0 0 1px rgba(255,255,255,0.05);
-		}
-		
-		.table thead {
-			background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-			border-bottom: 3px solid #f5f5f5;
-		}
-		
-		.table thead tr td {
-			color: #f5f5f5;
-			font-family: "Rajdhani", sans-serif;
-			font-weight: 900;
-			font-size: 1.2rem;
-			text-transform: uppercase;
-			letter-spacing: 3px;
-			padding: 1.25rem 1rem;
-			text-shadow: 2px 2px 0 #000;
-		}
-		
-		.table tbody {
-			background: transparent;
-		}
-		
-		.table tbody tr {
-			border-bottom: 2px solid #2a2a2a;
-			transition: all 0.2s ease;
-		}
-		
-		.table tbody tr:hover {
-			background: rgba(255,255,255,0.03);
-			transform: translateX(5px);
-		}
-		
-		.table tbody tr:nth-child(even) {
-			background: rgba(42,42,42,0.3);
-		}
-		
-		.table tbody tr:nth-child(even):hover {
-			background: rgba(255,255,255,0.05);
-		}
-		
-		.table tbody th,
-		.table tbody td {
-			color: #e0e0e0;
-			font-size: 1rem;
-			padding: 1.2rem 1rem;
-			vertical-align: middle;
-			border-color: #2a2a2a;
-			font-weight: 600;
-		}
-		
-		/* Place Column (Ranking) */
-		.table tbody th {
-			font-family: "Rajdhani", sans-serif;
-			font-weight: 900;
-			font-size: 1.5rem;
-			color: #b0b0b0;
-			text-shadow: 1px 1px 0 #000;
-		}
-		
-		/* Top 3 Rankings - Manga Style */
-		.table tbody tr:nth-child(1) {
-			background: repeating-linear-gradient(
-				45deg,
-				rgba(245,245,245,0.05),
-				rgba(245,245,245,0.05) 10px,
-				rgba(245,245,245,0.02) 10px,
-				rgba(245,245,245,0.02) 20px
-			);
-			border-left: 5px solid #f5f5f5;
-			border-right: 5px solid #f5f5f5;
-		}
-		
-		.table tbody tr:nth-child(1) th {
-			color: #f5f5f5;
-			font-size: 2rem;
-			position: relative;
-		}
-		
-		.table tbody tr:nth-child(1) th::before {
-			content: "1ST";
-			position: absolute;
-			right: -80px;
-			top: 50%;
-			transform: translateY(-50%) rotate(-15deg);
-			font-size: 0.7rem;
-			letter-spacing: 2px;
-			color: rgba(245,245,245,0.3);
-			font-weight: 900;
-		}
-		
-		.table tbody tr:nth-child(2) {
-			background: repeating-linear-gradient(
-				45deg,
-				rgba(224,224,224,0.04),
-				rgba(224,224,224,0.04) 10px,
-				rgba(224,224,224,0.02) 10px,
-				rgba(224,224,224,0.02) 20px
-			);
-			border-left: 4px solid #e0e0e0;
-			border-right: 4px solid #e0e0e0;
-		}
-		
-		.table tbody tr:nth-child(2) th {
-			color: #e0e0e0;
-			font-size: 1.7rem;
-		}
-		
-		.table tbody tr:nth-child(2) th::before {
-			content: "2ND";
-			position: absolute;
-			right: -80px;
-			top: 50%;
-			transform: translateY(-50%) rotate(-15deg);
-			font-size: 0.7rem;
-			letter-spacing: 2px;
-			color: rgba(224,224,224,0.2);
-			font-weight: 900;
-		}
-		
-		.table tbody tr:nth-child(3) {
-			background: repeating-linear-gradient(
-				45deg,
-				rgba(176,176,176,0.03),
-				rgba(176,176,176,0.03) 10px,
-				rgba(176,176,176,0.02) 10px,
-				rgba(176,176,176,0.02) 20px
-			);
-			border-left: 3px solid #b0b0b0;
-			border-right: 3px solid #b0b0b0;
-		}
-		
-		.table tbody tr:nth-child(3) th {
-			color: #b0b0b0;
-			font-size: 1.5rem;
-		}
-		
-		.table tbody tr:nth-child(3) th::before {
-			content: "3RD";
-			position: absolute;
-			right: -80px;
-			top: 50%;
-			transform: translateY(-50%) rotate(-15deg);
-			font-size: 0.7rem;
-			letter-spacing: 2px;
-			color: rgba(176,176,176,0.2);
-			font-weight: 900;
-		}
-		
-		/* Team/User Name Links */
-		.table tbody td a {
-			color: #e0e0e0;
-			text-decoration: none;
-			font-weight: 700;
-			transition: all 0.2s ease;
-			border-bottom: 2px solid transparent;
-			letter-spacing: 1px;
-		}
-		
-		.table tbody td a:hover {
-			color: #f5f5f5;
-			text-decoration: none;
-			border-bottom-color: #f5f5f5;
-		}
-		
-		/* Official Badge */
-		.badge-primary {
-			background: #f5f5f5;
-			color: #0a0a0a;
-			padding: 0.3rem 0.8rem;
-			border-radius: 0;
-			border: 2px solid #0a0a0a;
-			font-size: 0.7rem;
-			font-weight: 900;
-			text-transform: uppercase;
-			letter-spacing: 1px;
-			margin-left: 0.5rem;
-			box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
-			transition: all 0.2s ease;
-		}
-		
-		.badge-primary:hover {
-			background: #fff;
-			transform: translate(-1px, -1px);
-			box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
-		}
-		
-		/* Score Column */
-		.table tbody td:last-child {
-			font-family: "Rajdhani", sans-serif;
-			font-weight: 900;
-			font-size: 1.3rem;
-			color: #e0e0e0;
-			text-shadow: 1px 1px 0 #000;
-		}
-		
-		/* Row Animation */
-		.table tbody tr {
-			animation: slideInLeft 0.5s ease;
-		}
-		
-		@keyframes slideInLeft {
-			from {
-				opacity: 0;
-				transform: translateX(-20px);
-			}
-			to {
-				opacity: 1;
-				transform: translateX(0);
-			}
-		}
-		
-		/* Stagger Animation */
-		.table tbody tr:nth-child(1) { animation-delay: 0.1s; }
-		.table tbody tr:nth-child(2) { animation-delay: 0.15s; }
-		.table tbody tr:nth-child(3) { animation-delay: 0.2s; }
-		.table tbody tr:nth-child(4) { animation-delay: 0.25s; }
-		.table tbody tr:nth-child(5) { animation-delay: 0.3s; }
-		.table tbody tr:nth-child(6) { animation-delay: 0.35s; }
-		.table tbody tr:nth-child(7) { animation-delay: 0.4s; }
-		.table tbody tr:nth-child(8) { animation-delay: 0.45s; }
-		.table tbody tr:nth-child(9) { animation-delay: 0.5s; }
-		.table tbody tr:nth-child(10) { animation-delay: 0.55s; }
-		
-		/* Responsive Design */
-		@media (max-width: 768px) {
-			.table {
-				font-size: 0.9rem;
-			}
-			
-			.table thead tr td {
-				font-size: 1rem;
-				padding: 0.75rem 0.5rem;
-			}
-			
-			.table tbody th,
-			.table tbody td {
-				padding: 0.75rem 0.5rem;
-			}
-			
-			.table tbody tr:nth-child(1) th::before,
-			.table tbody tr:nth-child(2) th::before,
-			.table tbody tr:nth-child(3) th::before {
-				display: none;
-			}
-			
-			.jumbotron h1 {
-				font-size: 2.5rem;
-				letter-spacing: 4px;
-			}
-		}
-	</style>
+<style>
+/* INFERNO THEME - SCOREBOARD */
+
+.jumbotron {
+	background: linear-gradient(135deg, #1a0500 0%, #2d0a00 100%);
+	border-bottom: 3px solid #ff6600;
+	border-radius: 0;
+	padding: 3rem 1rem;
+	margin-bottom: 3rem;
+	box-shadow: 0 4px 30px rgba(255, 80, 0, 0.4);
+	position: relative;
+	overflow: hidden;
+}
+
+.jumbotron::before {
+	content: "";
+	position: absolute;
+	top: 0; left: 0; width: 100%; height: 100%;
+	background: radial-gradient(ellipse at 50% 120%, rgba(255, 80, 0, 0.3) 0%, transparent 70%);
+	pointer-events: none;
+}
+
+.jumbotron .container { position: relative; z-index: 1; }
+
+.jumbotron h1 {
+	color: #ff6600;
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+	font-size: 3rem;
+	text-transform: uppercase;
+	letter-spacing: 6px;
+	text-shadow: 0 0 20px rgba(255, 100, 0, 0.9), 0 0 40px rgba(255, 60, 0, 0.5);
+	margin: 0;
+}
+
+/* Score Graph Container */
+#score-graph {
+	background: linear-gradient(135deg, #1a0500, #2d0a00);
+	border: 2px solid rgba(255, 100, 0, 0.3);
+	border-radius: 0;
+	padding: 2rem;
+	margin-bottom: 3rem;
+	min-height: 350px;
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+	position: relative;
+}
+
+#score-graph::before {
+	content: "";
+	position: absolute;
+	top: 0; left: 0; width: 3px; height: 100%;
+	background: linear-gradient(180deg, #ff2200, #ff9500);
+}
+
+/* Spinner */
+.spinner {
+	color: #ff6600 !important;
+	filter: drop-shadow(0 0 10px rgba(255, 100, 0, 0.8));
+}
+
+/* Scoreboard Table */
+.table {
+	color: #ffe8d0;
+	background: linear-gradient(135deg, #1a0500, #2d0a00);
+}
+
+.table thead {
+	background: linear-gradient(135deg, #2d0a00, #1a0500);
+	border-bottom: 2px solid #ff6600;
+}
+
+.table thead th, .table thead td {
+	color: #ff6600;
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	border: none;
+	text-shadow: 0 0 10px rgba(255, 100, 0, 0.6);
+}
+
+.table tbody tr {
+	border-bottom: 1px solid rgba(255, 100, 0, 0.15);
+	transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+	background: rgba(255, 60, 0, 0.08);
+	transform: translateX(5px);
+}
+
+.table tbody td { border: none; color: #ffe8d0; }
+
+.table a {
+	color: #ff9500;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.table a:hover { color: #ffcc00; }
+
+/* Rank Column */
+.table tbody tr td:first-child {
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+	font-size: 1.1rem;
+	color: #ff6600;
+}
+
+/* Top 3 Medals */
+.table tbody tr:nth-child(1) td:first-child {
+	color: #ffcc00;
+	text-shadow: 0 0 15px rgba(255, 200, 0, 0.9);
+}
+
+.table tbody tr:nth-child(2) td:first-child {
+	color: #ff9500;
+	text-shadow: 0 0 10px rgba(255, 150, 0, 0.7);
+}
+
+.table tbody tr:nth-child(3) td:first-child {
+	color: #ff6600;
+	text-shadow: 0 0 10px rgba(255, 100, 0, 0.7);
+}
+
+/* Top 3 Row Highlights */
+.table tbody tr:nth-child(1) {
+	background: rgba(255, 200, 0, 0.05);
+	border-left: 3px solid #ffcc00;
+}
+
+.table tbody tr:nth-child(2) {
+	background: rgba(255, 150, 0, 0.04);
+	border-left: 3px solid #ff9500;
+}
+
+.table tbody tr:nth-child(3) {
+	background: rgba(255, 100, 0, 0.04);
+	border-left: 3px solid #ff6600;
+}
+
+/* Pagination */
+.page-nav {
+	color: #ff6600;
+	text-decoration: none;
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+	font-size: 1.2rem;
+	margin: 0 0.5rem;
+	transition: all 0.3s ease;
+	display: inline-block;
+}
+
+.page-nav:hover {
+	color: #ffcc00;
+	text-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
+	transform: scale(1.2);
+}
+
+.page-select {
+	background: rgba(26, 5, 0, 0.7);
+	border: 2px solid rgba(255, 100, 0, 0.3);
+	color: #ff6600;
+	border-radius: 0;
+	padding: 0.3rem 0.75rem;
+}
+
+/* Badge */
+.badge-primary {
+	background: linear-gradient(135deg, #ff2200, #ff6600);
+	color: #000;
+	border-radius: 0;
+	font-family: "Rajdhani", sans-serif;
+	font-weight: 700;
+}
+</style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Jumbotron -->
-<div class="jumbotron">
+	<div class="jumbotron">
+		<div class="container">
+			<h1>SCOREBOARD</h1>
+		</div>
+	</div>
 	<div class="container">
-		<h1>SCOREBOARD</h1>
-		<p class="lead mt-3">
-			The strongest competitors rise to the top
-		</p>
-	</div>
-</div>
+		{% include "components/errors.html" %}
 
-<div class="container">
-	<!-- Error Messages -->
-	{% include "components/errors.html" %}
-
-	<!-- Score Graph -->
-	<div id="score-graph" class="row d-flex align-items-center">
-		<div class="col-md-12 text-center">
-			<i class="fas fa-circle-notch fa-spin fa-3x fa-fw spinner"></i>
-			<p class="mt-3" style="color: #7f8c8d; font-size: 1.1rem; font-weight: 600;">
-				Loading score graph...
-			</p>
+		<div class="row">
+			<div class="col-md-12 d-none d-md-block d-lg-block">
+				<div id="score-graph" class="w-100 d-flex align-items-center">
+					<div class="text-center w-100">
+						<i class="fas fa-circle-notch fa-spin fa-3x fa-fw spinner"></i>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
 
-	<!-- Scoreboard Table -->
-	{% cache 60, CacheKeys.PUBLIC_SCOREBOARD_TABLE %}
-	{% if standings %}
-	<div id="scoreboard" class="row">
-		<div class="col-md-12">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<td scope="col" width="10px"><b>Rank</b></td>
-						<td scope="col"><b>{{ get_mode_as_word(capitalize=True) }}</b></td>
-						<td scope="col"><b>Score</b></td>
-					</tr>
-				</thead>
-				<tbody>
-				{% for standing in standings %}
-					<tr>
-						<th scope="row" class="text-center">{{ loop.index }}</th>
-						<td>
-							<a href="{{ generate_account_url(standing.account_id) }}">
-								{{ standing.name | truncate(50) }}
-
-								{% if standing.oauth_id %}
-									{% if Configs.user_mode == 'teams' %}
-									<a href="https://majorleaguecyber.org/t/{{ standing.name }}">
-										<span class="badge badge-primary">Official</span>
+		<div class="row">
+			<div class="col-md-12">
+				<table id="scoreboard" class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							{% if Configs.user_mode == "teams" %}
+							<th scope="col">Team</th>
+							{% else %}
+							<th scope="col">User</th>
+							{% endif %}
+							<th scope="col">Score</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for standing in standings %}
+						<tr>
+							<td scope="row">{{ standing.pos }}</td>
+							<td>
+								{% if Configs.user_mode == "teams" %}
+									<a href="{{ url_for('teams.public', team_id=standing.account_id) }}">
+										{{ standing.name | truncate(50) }}
 									</a>
-									{% elif Configs.user_mode == 'users' %}
-									<a href="https://majorleaguecyber.org/u/{{ standing.name }}">
-										<span class="badge badge-primary">Official</span>
+								{% else %}
+									<a href="{{ url_for('users.public', user_id=standing.account_id) }}">
+										{{ standing.name | truncate(50) }}
 									</a>
-									{% endif %}
 								{% endif %}
-							</a>
-						</td>
-						<td>{{ standing.score }}</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
+								{% if standing.oauth_id %}
+									<a href="https://majorleaguecyber.org/t/{{ standing.name }}">
+										<span class="badge badge-primary">OFFICIAL</span>
+									</a>
+								{% endif %}
+							</td>
+							<td>{{ standing.score }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 		</div>
+
+		{% if num_pages is defined and num_pages > 1 %}
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pagination-container text-center">
+					<strong style="color: #ff6600;">PAGE</strong>
+					<br><br>
+					{% if page is defined and prev_page is defined and page != 1 %}
+					<a href="{{ prev_page }}" class="page-nav">&lt;&lt;&lt;</a>
+					{% endif %}
+					<select class="page-select">
+						{% for p in range(1, num_pages + 1) %}
+						<option {% if page is defined and page == p %}selected{% endif %}>{{ p }}</option>
+						{% endfor %}
+					</select>
+					{% if page is defined and next_page is defined and page < num_pages %}
+					<a href="{{ next_page }}" class="page-nav">&gt;&gt;&gt;</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		{% endif %}
 	</div>
-	{% endif %}
-	{% endcache %}
-</div>
 {% endblock %}
 
 {% block scripts %}
-	<script defer src="{{ url_for('views.themes', path='js/echarts.bundle.js') }}"></script>
-	
 	<script>
-	document.addEventListener('DOMContentLoaded', function() {
-		// Add hover effect for rows
-		const standings = document.querySelectorAll('#scoreboard tbody tr');
-		standings.forEach(function(row, index) {
-			row.addEventListener('mouseenter', function() {
-				this.style.transform = 'translateX(10px)';
-			});
-			
-			row.addEventListener('mouseleave', function() {
-				this.style.transform = 'translateX(0)';
-			});
-		});
-	});
+		var stats_data = {{ {
+			'type': 'scoreboard',
+		} | tojson }};
 	</script>
+	<script defer src="{{ url_for('views.themes', path='js/echarts.bundle.js') }}"></script>
+	<script defer src="{{ url_for('views.themes', path='js/graphs.js') }}"></script>
 {% endblock %}
 
 {% block entrypoint %}

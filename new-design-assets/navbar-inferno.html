@@ -113,6 +113,7 @@
     box-shadow: 0 4px 40px rgba(255, 60, 0, 0.6);
 }
 
+/* Fire canvas behind everything */
 .fire-canvas {
     position: absolute;
     top: 0; left: 0;
@@ -122,6 +123,7 @@
     z-index: 0;
 }
 
+/* Content above canvas */
 .inferno-navbar .container { position: relative; z-index: 2; }
 
 .brand-text {
@@ -180,6 +182,7 @@
 .inferno-navbar .nav-link:hover,
 .inferno-navbar .nav-item.active .nav-link { color: #ff6600 !important; }
 
+/* Login / Register buttons */
 .nav-link-login, .nav-link-register {
     background: linear-gradient(135deg, #ff2200, #ff6600) !important;
     color: #000 !important;
@@ -212,6 +215,7 @@
 
 .nav-link-login::after, .nav-link-register::after { display: none; }
 
+/* Logout button */
 .nav-link-logout {
     border: 1px solid rgba(255, 100, 0, 0.5) !important;
     border-radius: 0;
@@ -251,3 +255,86 @@
     }
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.inferno-navbar');
+    const canvas = navbar.querySelector('.fire-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+        canvas.width  = navbar.offsetWidth;
+        canvas.height = navbar.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    /* ---- Fire Particle System ---- */
+    const particles = [];
+    const MAX = 120;
+
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+    function spawnParticle() {
+        particles.push({
+            x:    randomBetween(0, canvas.width),
+            y:    canvas.height + randomBetween(0, 10),
+            vx:   randomBetween(-0.4, 0.4),
+            vy:   randomBetween(-1.2, -0.5),
+            life: 1.0,
+            decay: randomBetween(0.012, 0.025),
+            size: randomBetween(2, 5)
+        });
+    }
+
+    function getColor(life) {
+        /* yellow → orange → red → transparent as life decreases */
+        if (life > 0.7) return `rgba(255, ${Math.floor(180 + 75 * life)}, 0, ${life})`;
+        if (life > 0.4) return `rgba(255, ${Math.floor(life * 160)}, 0, ${life})`;
+        return `rgba(200, 0, 0, ${life * 0.6})`;
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        /* Spawn new particles */
+        const toSpawn = Math.floor(randomBetween(2, 5));
+        for (let i = 0; i < toSpawn && particles.length < MAX; i++) spawnParticle();
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x   += p.vx + Math.sin(Date.now() * 0.003 + i) * 0.3;
+            p.y   += p.vy;
+            p.life -= p.decay;
+
+            if (p.life <= 0) { particles.splice(i, 1); continue; }
+
+            ctx.beginPath();
+            const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2);
+            grad.addColorStop(0, getColor(p.life));
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = grad;
+            ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    /* ---- Scroll Effect ---- */
+    window.addEventListener('scroll', function() {
+        navbar.classList.toggle('scrolled', window.pageYOffset > 50);
+    });
+
+    /* ---- Active Link ---- */
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.inferno-navbar .nav-link').forEach(function(link) {
+        if (link.getAttribute('href') === currentPath)
+            link.closest('.nav-item').classList.add('active');
+    });
+
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
